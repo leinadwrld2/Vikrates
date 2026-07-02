@@ -1,0 +1,196 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:#fff;
+    min-height:100vh;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:30px 0;
+}
+
+header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+header h1{
+    font-size:40px;
+    font-weight:700;
+}
+
+header p{
+    color:#94a3b8;
+    margin-top:8px;
+}
+
+.search-box{
+    background:#1e293b;
+    display:flex;
+    align-items:center;
+    padding:15px 20px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.search-box i{
+    color:#94a3b8;
+    margin-right:12px;
+}
+
+.search-box input{
+    width:100%;
+    background:none;
+    border:none;
+    outline:none;
+    color:white;
+    font-size:17px;
+}
+
+.search-box input::placeholder{
+    color:#94a3b8;
+}
+
+.last-update{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    color:#94a3b8;
+    margin-bottom:35px;
+}
+
+.section-title{
+    margin:25px 0;
+    font-size:24px;
+    font-weight:600;
+}
+
+.rates-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1e293b;
+    border-radius:20px;
+    padding:20px;
+    transition:.3s;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 35px rgba(0,0,0,.3);
+}
+
+.card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.flag{
+    font-size:35px;
+}
+
+.currency{
+    font-size:22px;
+    font-weight:600;
+}
+
+.rate{
+    font-size:28px;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+.change{
+    margin-top:15px;
+    font-weight:600;
+}
+
+.up{
+    color:#22c55e;
+}
+
+.down{
+    color:#ef4444;
+}
+
+footer{
+    margin-top:50px;
+    text-align:center;
+    color:#94a3b8;
+}
+
+#themeBtn{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    border:none;
+    background:#2563eb;
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.light{
+    background:#f8fafc;
+    color:#111827;
+}
+
+.light .search-box,
+.light .card{
+    background:white;
+    color:#111827;
+}
+
+.light .search-box input{
+    color:#111827;
+}
+
+.light .search-box input::placeholder{
+    color:#666;
+}
+
+.light header p,
+.light footer,
+.light .last-update{
+    color:#666;
+}
+
+@media(max-width:700px){
+
+header h1{
+font-size:30px;
+}
+
+.section-title{
+font-size:20px;
+}
+
+.card{
+padding:18px;
+}
+
+.rate{
+font-size:24px;
+}
+
+}
