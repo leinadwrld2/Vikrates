@@ -5,7 +5,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.2/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
+  apiKey: "AIzaSyDmqHmJE5VAFhnpb96GvBp1R1cVnWu4Gtc",
   authDomain: "vikstock-15ad1.firebaseapp.com",
   projectId: "vikstock-15ad1",
   storageBucket: "vikstock-15ad1.firebasestorage.app",
