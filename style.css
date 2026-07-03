@@ -381,5 +381,38 @@ cursor:pointer;
 color:#22c55e;
 font-weight:bold;
 }
+  #loginPage{
+max-width:420px;
+margin:80px auto;
+background:#13253b;
+padding:30px;
+border-radius:20px;
+text-align:center;
+}
+
+#loginPage input{
+width:100%;
+padding:15px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+#loginPage button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+background:#4ea8ff;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+#loginPage button:hover{
+opacity:.9;
+}
 }
 
