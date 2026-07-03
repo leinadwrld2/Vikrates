@@ -300,3 +300,20 @@ setInterval(() => {
 // -------------------- PAGE READY --------------------
 
 console.log("✅ VikStock Admin Loaded");
+// Sidebar Navigation
+
+const ratesBtn = document.getElementById("ratesBtn");
+
+if (ratesBtn) {
+
+    ratesBtn.addEventListener("click", () => {
+
+        document
+            .getElementById("ratesSection")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+    });
+
+}
