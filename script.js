@@ -64,7 +64,7 @@ officialContainer.innerHTML="";
 blackContainer.innerHTML="";
 
 snapshot.forEach(doc=>{
-
+console.log(doc.data());
 const rate = doc.data();
 
 const officialRate =
