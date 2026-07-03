@@ -230,5 +230,37 @@ font-size:24px;
 .search input{
 width:100%;
 }
-
+.admin-container{
+max-width:600px;
+margin:50px auto;
+padding:30px;
+background:#13253b;
+border-radius:20px;
 }
+
+.admin-container input{
+width:100%;
+padding:15px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+.admin-container button{
+width:100%;
+padding:15px;
+margin-top:15px;
+background:#4ea8ff;
+color:#fff;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+}
+
+.admin-container button:hover{
+opacity:.9;
+}
+}
+
