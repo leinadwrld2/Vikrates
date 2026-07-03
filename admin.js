@@ -53,13 +53,15 @@ onAuthStateChanged(auth, (user) => {
 if (user) {
 
 if (dashboard)
-dashboard.style.display = "block";
+document.getElementById("loginPage").style.display = "none";
+dashboard.style.display = "flex";
 
 loadCurrencies();
 
 } else {
 
 if (dashboard)
+document.getElementById("loginPage").style.display = "block";
 dashboard.style.display = "none";
 
 }
