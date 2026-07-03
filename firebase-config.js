@@ -1,8 +1,3 @@
-// =============================
-// VikStock Firebase Config
-// Replace these values later
-// =============================
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
@@ -10,12 +5,12 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.2/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "YOUR_API_KEY_HERE",
+  authDomain: "vikstock-15ad1.firebaseapp.com",
+  projectId: "vikstock-15ad1",
+  storageBucket: "vikstock-15ad1.firebasestorage.app",
+  messagingSenderId: "430360978659",
+  appId: "1:430360978659:web:38e11fbb08b69cff6311d6"
 };
 
 const app = initializeApp(firebaseConfig);
