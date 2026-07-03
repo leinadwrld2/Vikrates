@@ -65,7 +65,12 @@ blackContainer.innerHTML="";
 
 snapshot.forEach(doc=>{
 
-const rate=doc.data();
+const rate = doc.data();
+
+const officialRate =
+officialRates && officialRates[rate.currency]
+? (1 / officialRates[rate.currency]).toFixed(2)
+: "N/A";
 
 const card=`
 
@@ -83,9 +88,7 @@ Official Rate
 
 <div class="buy">
 
-${officialRates && officialRates[rate.currency]
-? officialRates[rate.currency].toFixed(2)
-: "N/A"}
+₦${officialRate}
 
 </div>
 
