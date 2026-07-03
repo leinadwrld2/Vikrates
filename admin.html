@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VikStock Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="admin-container">
+
+<h1>🔐 VikStock Admin</h1>
+
+<p>Login to manage exchange rates</p>
+
+<div class="login-box">
+
+<input
+type="email"
+id="email"
+placeholder="Email">
+
+<input
+type="password"
+id="password"
+placeholder="Password">
+
+<button id="loginBtn">
+
+Login
+
+</button>
+
+</div>
+
+
+<div id="dashboard" style="display:none;">
+
+<h2>Update Currency</h2>
+
+<input
+type="text"
+id="currency"
+placeholder="Currency (USD)">
+
+<input
+type="text"
+id="flag"
+placeholder="Flag (🇺🇸)">
+
+<input
+type="number"
+id="officialBuy"
+placeholder="Official Buy">
+
+<input
+type="number"
+id="officialSell"
+placeholder="Official Sell">
+
+<input
+type="number"
+id="blackBuy"
+placeholder="Black Market Buy">
+
+<input
+type="number"
+id="blackSell"
+placeholder="Black Market Sell">
+
+<button id="saveBtn">
+
+Save Currency
+
+</button>
+
+<hr>
+
+<h2>Delete Currency</h2>
+
+<input
+type="text"
+id="deleteCurrency"
+placeholder="Currency Code">
+
+<button id="deleteBtn">
+
+Delete
+
+</button>
+
+<hr>
+
+<button id="logoutBtn">
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="admin.js"></script>
+
+</body>
+</html>
