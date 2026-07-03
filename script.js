@@ -5,6 +5,29 @@ collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
+const API_KEY = "873659d253950812b2f2a182";
+
+const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/NGN`;
+
+async function getOfficialRates() {
+
+    try {
+
+        const response = await fetch(API_URL);
+
+        const data = await response.json();
+
+        return data.conversion_rates;
+
+    } catch (error) {
+
+        console.error(error);
+
+        return null;
+
+    }
+
+}
 const officialContainer =
 document.getElementById("officialRates");
 
@@ -32,6 +55,8 @@ blackContainer.innerHTML="<p>Loading...</p>";
 
 try{
 
+const officialRates = await getOfficialRates();
+
 const snapshot =
 await getDocs(collection(db,"rates"));
 
@@ -52,25 +77,15 @@ const card=`
 
 <div class="rate-title">
 
-Official Buy
+Official Rate
 
 </div>
 
 <div class="buy">
 
-₦${rate.officialBuy}
-
-</div>
-
-<div class="rate-title">
-
-Official Sell
-
-</div>
-
-<div class="sell">
-
-₦${rate.officialSell}
+${officialRates && officialRates[rate.currency]
+? officialRates[rate.currency].toFixed(2)
+: "N/A"}
 
 </div>
 
