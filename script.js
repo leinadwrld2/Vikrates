@@ -1,134 +1,76 @@
-const officialRates = [
-{
-flag:"🇺🇸",
-currency:"USD",
-rate:"₦1,585",
-change:"+₦5",
-up:true
-},
-{
-flag:"🇬🇧",
-currency:"GBP",
-rate:"₦2,145",
-change:"+₦8",
-up:true
-},
-{
-flag:"🇪🇺",
-currency:"EUR",
-rate:"₦1,850",
-change:"-₦3",
-up:false
-},
-{
-flag:"🇵🇱",
-currency:"PLN",
-rate:"₦435",
-change:"+₦2",
-up:true
-},
-{
-flag:"🇨🇦",
-currency:"CAD",
-rate:"₦1,150",
-change:"+₦4",
-up:true
-},
-{
-flag:"🇦🇪",
-currency:"AED",
-rate:"₦430",
-change:"-₦1",
-up:false
-},
-{
-flag:"🇨🇳",
-currency:"CNY",
-rate:"₦225",
-change:"+₦1",
-up:true
-}
-];
+import { db } from "./firebase-config.js";
 
-const blackRates = [
-{
-flag:"🇺🇸",
-currency:"USD",
-rate:"₦1,620",
-change:"+₦10",
-up:true
-},
-{
-flag:"🇬🇧",
-currency:"GBP",
-rate:"₦2,180",
-change:"+₦12",
-up:true
-},
-{
-flag:"🇪🇺",
-currency:"EUR",
-rate:"₦1,890",
-change:"+₦5",
-up:true
-},
-{
-flag:"🇵🇱",
-currency:"PLN",
-rate:"₦445",
-change:"-₦2",
-up:false
-},
-{
-flag:"🇨🇦",
-currency:"CAD",
-rate:"₦1,180",
-change:"+₦6",
-up:true
-},
-{
-flag:"🇦🇪",
-currency:"AED",
-rate:"₦445",
-change:"+₦2",
-up:true
-},
-{
-flag:"🇨🇳",
-currency:"CNY",
-rate:"₦235",
-change:"+₦1",
-up:true
-}
-];
+import {
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
-function createCards(data, container){
+const officialContainer =
+document.getElementById("officialRates");
 
-container.innerHTML="";
+const blackContainer =
+document.getElementById("blackRates");
 
-data.forEach(item=>{
+const search =
+document.getElementById("search");
 
-container.innerHTML += `
+const lastUpdated =
+document.getElementById("lastUpdated");
+
+const themeBtn =
+document.getElementById("theme");
+
+
+
+// ---------- Load Rates ----------
+
+async function loadRates(){
+
+officialContainer.innerHTML="<p>Loading...</p>";
+
+blackContainer.innerHTML="<p>Loading...</p>";
+
+try{
+
+const snapshot =
+await getDocs(collection(db,"rates"));
+
+officialContainer.innerHTML="";
+blackContainer.innerHTML="";
+
+snapshot.forEach(doc=>{
+
+const rate=doc.data();
+
+const card=`
 
 <div class="card">
 
-<div class="card-top">
+<div class="flag">${rate.flag}</div>
 
-<div>
+<div class="currency">${rate.currency}</div>
 
-<div class="flag">${item.flag}</div>
+<div class="rate-title">
 
-<div class="currency">${item.currency}</div>
-
-</div>
+Official Buy
 
 </div>
 
-<div class="rate">${item.rate}</div>
+<div class="buy">
 
-<div class="change ${item.up ? "up":"down"}">
+₦${rate.officialBuy}
 
-${item.up ? "▲":"▼"} ${item.change}
+</div>
+
+<div class="rate-title">
+
+Official Sell
+
+</div>
+
+<div class="sell">
+
+₦${rate.officialSell}
 
 </div>
 
@@ -136,34 +78,89 @@ ${item.up ? "▲":"▼"} ${item.change}
 
 `;
 
+officialContainer.innerHTML+=card;
+
+
+
+const card2=`
+
+<div class="card">
+
+<div class="flag">${rate.flag}</div>
+
+<div class="currency">${rate.currency}</div>
+
+<div class="rate-title">
+
+Black Buy
+
+</div>
+
+<div class="buy">
+
+₦${rate.blackBuy}
+
+</div>
+
+<div class="rate-title">
+
+Black Sell
+
+</div>
+
+<div class="sell">
+
+₦${rate.blackSell}
+
+</div>
+
+</div>
+
+`;
+
+blackContainer.innerHTML+=card2;
+
 });
 
 }
+catch(error){
 
-createCards(
-officialRates,
-document.getElementById("officialRates")
-);
+officialContainer.innerHTML=
+"<h3>Unable to load rates.</h3>";
 
-createCards(
-blackRates,
-document.getElementById("blackRates")
-);
+blackContainer.innerHTML="";
+
+console.log(error);
+
+}
+
+}
+
+loadRates();
 
 
-const searchInput = document.getElementById("searchInput");
 
-searchInput.addEventListener("keyup",()=>{
+// ---------- Search ----------
 
-const text = searchInput.value.toLowerCase();
+search.addEventListener("keyup",()=>{
+
+let value=
+search.value.toLowerCase();
 
 document.querySelectorAll(".card").forEach(card=>{
 
-card.style.display =
-card.innerText.toLowerCase().includes(text)
+card.style.display=
+
+card.innerText
+.toLowerCase()
+.includes(value)
+
 ?
+
 "block"
+
 :
+
 "none";
 
 });
@@ -171,11 +168,20 @@ card.innerText.toLowerCase().includes(text)
 });
 
 
+
+// ---------- Last Updated ----------
+
 function updateTime(){
 
-const now = new Date();
+let now=
+new Date();
 
-document.getElementById("time").innerHTML =
+lastUpdated.innerHTML=
+
+"Last Updated : "
+
++
+
 now.toLocaleString();
 
 }
@@ -185,8 +191,8 @@ updateTime();
 setInterval(updateTime,1000);
 
 
-const themeBtn =
-document.getElementById("themeBtn");
+
+// ---------- Dark Mode ----------
 
 themeBtn.onclick=()=>{
 
@@ -194,31 +200,22 @@ document.body.classList.toggle("light");
 
 if(document.body.classList.contains("light")){
 
-themeBtn.innerHTML =
-'<i class="fa-solid fa-sun"></i>';
+themeBtn.innerHTML="☀️";
 
 }else{
 
-themeBtn.innerHTML =
-'<i class="fa-solid fa-moon"></i>';
+themeBtn.innerHTML="🌙";
 
 }
 
 };
 
 
-document.querySelectorAll(".card").forEach(card=>{
 
-card.addEventListener("mouseenter",()=>{
+// ---------- Auto Refresh ----------
 
-card.style.transform="translateY(-8px)";
+setInterval(()=>{
 
-});
+loadRates();
 
-card.addEventListener("mouseleave",()=>{
-
-card.style.transform="translateY(0px)";
-
-});
-
-});
+},30000);
