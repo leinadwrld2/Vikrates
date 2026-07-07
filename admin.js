@@ -75,7 +75,7 @@ alert(error.message);
 
 // -------------------- CHECK LOGIN --------------------
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
 
 if (user) {
 
