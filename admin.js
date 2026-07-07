@@ -13,7 +13,34 @@ import {
     setDoc,
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+const API_KEY = "873659d253950812b2f2a182";
 
+const API_URL =
+`https://v6.exchangerate-api.com/v6/${API_KEY}/latest/NGN`;
+
+let officialRates = {};
+
+async function loadOfficialRates() {
+
+    try {
+
+        const response = await fetch(API_URL);
+
+        const data = await response.json();
+
+        officialRates = data.conversion_rates;
+
+        console.log("✅ Official Rates Loaded");
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to connect to ExchangeRate API");
+
+    }
+
+}
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const dashboard = document.getElementById("dashboard");
@@ -56,6 +83,8 @@ if (dashboard)
 document.getElementById("loginPage").style.display = "none";
 dashboard.style.display = "flex";
 
+await loadOfficialRates();
+
 loadCurrencies();
 
 } else {
@@ -94,9 +123,47 @@ async function loadCurrencies() {
 
                 <td>${rate.flag}</td>
 
-                <td class="auto-rate">Auto</td>
+                <<td>
 
-                <td class="auto-rate">Auto</td>
+<span class="auto-rate">
+
+₦${officialRates[rate.currency]
+? (1 / officialRates[rate.currency]).toFixed(2)
+: "N/A"}
+
+</span>
+
+</td>
+
+<td>
+
+<select id="percent-${rate.currency}">
+
+<option value="0">Manual</option>
+
+<option value="5">5%</option>
+
+<option value="10">10%</option>
+
+<option value="15">15%</option>
+
+<option value="20">20%</option>
+
+<option value="25">25%</option>
+
+<option value="30">30%</option>
+
+</select>
+
+<br><br>
+
+<span id="calculated-${rate.currency}">
+
+--
+
+</span>
+
+</td>
 
                 <td>
 
