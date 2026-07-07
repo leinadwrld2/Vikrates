@@ -13,6 +13,7 @@ import {
     setDoc,
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
 const API_KEY = "873659d253950812b2f2a182";
 
 const API_URL =
@@ -20,83 +21,133 @@ const API_URL =
 
 let officialRates = {};
 
+const loginBtn =
+document.getElementById("loginBtn");
+
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+const dashboard =
+document.getElementById("dashboard");
+
+const loginPage =
+document.getElementById("loginPage");
+
+const rateTable =
+document.getElementById("rateTable");
+
+const addCurrencyBtn =
+document.getElementById("addCurrency");
+
+const currencyCount =
+document.getElementById("currencyCount");
+
+// ----------------------
+// LOAD OFFICIAL RATES
+// ----------------------
+
 async function loadOfficialRates() {
 
     try {
 
-        const response = await fetch(API_URL);
+        const response =
+            await fetch(API_URL);
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        officialRates = data.conversion_rates;
+        if (data.result !== "success") {
+
+            throw new Error("Exchange API failed.");
+
+        }
+
+        officialRates =
+            data.conversion_rates;
 
         console.log("✅ Official Rates Loaded");
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error);
 
-        alert("Unable to connect to ExchangeRate API");
+        alert("Unable to load official exchange rates.");
 
     }
 
 }
-const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-const dashboard = document.getElementById("dashboard");
-const rateTable = document.getElementById("rateTable");
-const addCurrencyBtn = document.getElementById("addCurrency");
 
-// -------------------- LOGIN --------------------
+// ----------------------
+// LOGIN
+// ----------------------
 
 if (loginBtn) {
 
-loginBtn.addEventListener("click", async () => {
+    loginBtn.addEventListener("click", async () => {
 
-const email = document.getElementById("email").value;
+        const email =
+            document.getElementById("email").value;
 
-const password = document.getElementById("password").value;
+        const password =
+            document.getElementById("password").value;
 
-try {
+        try {
 
-await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
 
-alert("Login Successful");
+            alert("Login Successful");
 
-} catch (error) {
+        }
 
-alert(error.message);
+        catch (error) {
+
+            alert(error.message);
+
+        }
+
+    });
 
 }
 
-});
-
-}
-
-// -------------------- CHECK LOGIN --------------------
+// ----------------------
+// AUTH STATE
+// ----------------------
 
 onAuthStateChanged(auth, async (user) => {
 
-if (user) {
+    if (user) {
 
-if (dashboard)
-document.getElementById("loginPage").style.display = "none";
-dashboard.style.display = "flex";
+        if (loginPage)
+            loginPage.style.display = "none";
 
-await loadOfficialRates();
+        if (dashboard)
+            dashboard.style.display = "flex";
 
-loadCurrencies();
+        await loadOfficialRates();
 
-} else {
+        await loadCurrencies();
 
-if (dashboard)
-document.getElementById("loginPage").style.display = "block";
-dashboard.style.display = "none";
+    } else {
 
-}
+        if (loginPage)
+            loginPage.style.display = "block";
+
+        if (dashboard)
+            dashboard.style.display = "none";
+
+    }
 
 });
-// -------------------- LOAD CURRENCIES --------------------
+
+// ----------------------
+// LOAD CURRENCIES
+// ----------------------
 
 async function loadCurrencies() {
 
@@ -106,64 +157,93 @@ async function loadCurrencies() {
 
     try {
 
-        const snapshot = await getDocs(collection(db, "rates"));
+        const snapshot =
+            await getDocs(collection(db, "rates"));
 
-        document.getElementById("currencyCount").innerText =
-            snapshot.size;
+        if (currencyCount) {
 
-        snapshot.forEach((document) => {
+            currencyCount.innerText =
+                snapshot.size;
 
-            const rate = document.data();
+        }
+        // ----------------------
+// PERCENTAGE CALCULATOR
+// ----------------------
 
-            rateTable.innerHTML += `
-            // Wait for the row to be added
-setTimeout(() => {
+function attachPercentageEvents() {
 
-    const percent =
-        document.getElementById(`percent-${rate.currency}`);
+    const rows = rateTable.querySelectorAll("tr");
 
-    const calculated =
-        document.getElementById(`calculated-${rate.currency}`);
+    rows.forEach((row) => {
 
-    if (!percent || !calculated) return;
+        const currency = row.cells[0]?.innerText;
 
-    percent.addEventListener("change", () => {
+        if (!currency) return;
 
-        const official =
-            officialRates[rate.currency]
-                ? (1 / officialRates[rate.currency])
-                : 0;
+        const percent =
+            document.getElementById(`percent-${currency}`);
 
-        const markup =
-            Number(percent.value);
+        const calculated =
+            document.getElementById(`calculated-${currency}`);
 
-        const result =
-            official + (official * markup / 100);
+        const buy =
+            document.getElementById(`buy-${currency}`);
 
-        calculated.innerHTML =
-            "₦" + result.toFixed(2);
+        const sell =
+            document.getElementById(`sell-${currency}`);
+
+        if (!percent || !calculated) return;
+
+        percent.addEventListener("change", () => {
+
+            const official =
+                officialRates[currency]
+                    ? (1 / officialRates[currency])
+                    : 0;
+
+            const markup = Number(percent.value);
+
+            if (markup === 0) {
+
+                calculated.innerHTML = "--";
+
+                return;
+
+            }
+
+            const result =
+                official + (official * markup / 100);
+
+            calculated.innerHTML =
+                "₦" + result.toFixed(2);
+
+            if (buy) buy.value = result.toFixed(2);
+            if (sell) sell.value = result.toFixed(2);
+
+        });
 
     });
 
-}, 100);
+}
 
-            <tr>
+        snapshot.forEach((docSnap) => {
 
-                <td>${rate.currency}</td>
+            const rate = docSnap.data();
 
-                <td>${rate.flag}</td>
+            const official =
+                officialRates[rate.currency]
+                ? (1 / officialRates[rate.currency]).toFixed(2)
+                : "N/A";
 
-                <<td>
+            rateTable.innerHTML += `
 
-<span class="auto-rate">
+<tr>
 
-₦${officialRates[rate.currency]
-? (1 / officialRates[rate.currency]).toFixed(2)
-: "N/A"}
+<td>${rate.currency}</td>
 
-</span>
+<td>${rate.flag}</td>
 
-</td>
+<td>₦${official}</td>
 
 <td>
 
@@ -187,117 +267,104 @@ setTimeout(() => {
 
 <br><br>
 
-<span id="calculated-${rate.currency}">
-
---
-
-</span>
+<span id="calculated-${rate.currency}">--</span>
 
 </td>
 
-                <td>
+<td>
 
-                    <input
-                        type="number"
-                        id="buy-${rate.currency}"
-                        value="${rate.blackBuy || ""}">
+<input
+type="number"
+id="buy-${rate.currency}"
+value="${rate.blackBuy || ""}">
 
-                </td>
+</td>
 
-                <td>
+<td>
 
-                    <input
-                        type="number"
-                        id="sell-${rate.currency}"
-                        value="${rate.blackSell || ""}">
+<input
+type="number"
+id="sell-${rate.currency}"
+value="${rate.blackSell || ""}">
 
-                </td>
+</td>
 
-                <td>
+<td>
 
-                    <button
-                        class="save-btn"
-                        onclick="saveRate('${rate.currency}','${rate.flag}')">
+<button
+class="save-btn"
+onclick="saveRate('${rate.currency}','${rate.flag}')">
 
-                        💾 Save
+💾 Save
 
-                    </button>
+</button>
 
-                    <button
-                        class="logout-btn"
-                        onclick="deleteRate('${rate.currency}')">
+<button
+class="logout-btn"
+onclick="deleteRate('${rate.currency}')">
 
-                        🗑 Delete
+🗑 Delete
 
-                    </button>
+</button>
 
-                </td>
+</td>
 
-            </tr>
+</tr>
 
-            `;
+`;
 
         });
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert("Unable to load currencies.");
-
-    }
-
-}
-// -------------------- SAVE RATE --------------------
+attachPercentageEvents();
+        // ----------------------
+// SAVE RATE
+// ----------------------
 
 window.saveRate = async function (currency, flag) {
 
-    const percentDropdown =
-document.getElementById(`percent-${currency}`);
+    const percent =
+        document.getElementById(`percent-${currency}`);
 
-let blackBuy;
-let blackSell;
+    let blackBuy;
+    let blackSell;
 
-if (percentDropdown && Number(percentDropdown.value) > 0) {
+    if (percent && Number(percent.value) > 0) {
 
-    const official =
-        officialRates[currency]
-            ? (1 / officialRates[currency])
-            : 0;
+        const official =
+            officialRates[currency]
+                ? (1 / officialRates[currency])
+                : 0;
 
-    const markup =
-        Number(percentDropdown.value);
+        const result =
+            official + (official * Number(percent.value) / 100);
 
-    const calculated =
-        official + (official * markup / 100);
+        blackBuy = Number(result.toFixed(2));
+        blackSell = Number(result.toFixed(2));
 
-    blackBuy = Number(calculated.toFixed(2));
-    blackSell = Number(calculated.toFixed(2));
+    } else {
 
-} else {
+        blackBuy = Number(
+            document.getElementById(`buy-${currency}`).value
+        );
 
-    blackBuy = Number(
-        document.getElementById(`buy-${currency}`).value
-    );
+        blackSell = Number(
+            document.getElementById(`sell-${currency}`).value
+        );
 
-    blackSell = Number(
-        document.getElementById(`sell-${currency}`).value
-    );
-
-}
+    }
 
     try {
 
         await setDoc(
-            doc(db, "rates", {
-    currency: currency,
-    flag: flag,
-    blackBuy: blackBuy,
-    blackSell: blackSell,
-    markupPercent: percentDropdown
-        ? Number(percentDropdown.value)
-        : 0
-},
+            doc(db, "rates", currency),
+            {
+                currency,
+                flag,
+                blackBuy,
+                blackSell,
+                markupPercent: percent
+                    ? Number(percent.value)
+                    : 0
+            },
             { merge: true }
         );
 
@@ -307,21 +374,20 @@ if (percentDropdown && Number(percentDropdown.value) > 0) {
 
         console.error(error);
 
-        alert("Failed to save " + currency);
+        alert("Unable to save.");
 
     }
 
 };
 
-// -------------------- DELETE RATE --------------------
+// ----------------------
+// DELETE RATE
+// ----------------------
 
 window.deleteRate = async function (currency) {
 
-    const confirmDelete = confirm(
-        "Delete " + currency + "?"
-    );
-
-    if (!confirmDelete) return;
+    if (!confirm(`Delete ${currency}?`))
+        return;
 
     try {
 
@@ -329,47 +395,51 @@ window.deleteRate = async function (currency) {
             doc(db, "rates", currency)
         );
 
-        loadCurrencies();
-
-        alert(currency + " deleted.");
+        await loadCurrencies();
 
     } catch (error) {
 
         console.error(error);
 
-        alert("Unable to delete " + currency);
+        alert("Unable to delete currency.");
 
     }
 
 };
 
-// -------------------- ADD NEW CURRENCY --------------------
+// ----------------------
+// ADD CURRENCY
+// ----------------------
 
 if (addCurrencyBtn) {
 
     addCurrencyBtn.addEventListener("click", async () => {
 
-        const currency = prompt("Currency Code (e.g. CAD)")
-            ?.toUpperCase();
+        const currency =
+            prompt("Currency Code (e.g. CAD)")
+                ?.toUpperCase();
 
         if (!currency) return;
 
-        const flag = prompt("Flag Emoji (e.g. 🇨🇦)");
+        const flag =
+            prompt("Flag Emoji (e.g. 🇨🇦)");
 
         if (!flag) return;
 
         try {
 
-            await setDoc(doc(db, "rates", currency), {
+            await setDoc(
+                doc(db, "rates", currency),
+                {
+                    currency,
+                    flag,
+                    blackBuy: 0,
+                    blackSell: 0,
+                    markupPercent: 0
+                }
+            );
 
-                currency: currency,
-                flag: flag,
-                blackBuy: 0,
-                blackSell: 0
-
-            });
-
-            loadCurrencies();
+            await loadCurrencies();
 
             alert(currency + " added.");
 
@@ -377,68 +447,57 @@ if (addCurrencyBtn) {
 
             console.error(error);
 
-            alert("Failed to add currency.");
+            alert("Unable to add currency.");
 
         }
 
     });
 
 }
-// -------------------- LOGOUT --------------------
+
+// ----------------------
+// LOGOUT
+// ----------------------
 
 if (logoutBtn) {
 
     logoutBtn.addEventListener("click", async () => {
 
-        try {
+        await signOut(auth);
 
-            await signOut(auth);
-
-            alert("Logged out successfully.");
-
-            window.location.reload();
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert("Unable to logout.");
-
-        }
+        location.reload();
 
     });
 
 }
 
-// -------------------- AUTO REFRESH --------------------
+// ----------------------
+// AUTO REFRESH
+// ----------------------
 
-setInterval(() => {
+setInterval(async () => {
 
     if (auth.currentUser) {
 
-        loadCurrencies();
+        await loadOfficialRates();
+
+        await loadCurrencies();
 
     }
 
 }, 30000);
 
-// -------------------- PAGE READY --------------------
+// ----------------------
+// READY
+// ----------------------
 
-console.log("✅ VikStock Admin Loaded");
-// Sidebar Navigation
+console.log("✅ VikStock Admin V2 Loaded");
+    } catch (error) {
 
-const ratesBtn = document.getElementById("ratesBtn");
+        console.error(error);
 
-if (ratesBtn) {
+        alert("Unable to load currencies.");
 
-    ratesBtn.addEventListener("click", () => {
-
-        document
-            .getElementById("ratesSection")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
-
-    });
+    }
 
 }
