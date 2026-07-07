@@ -116,6 +116,36 @@ async function loadCurrencies() {
             const rate = document.data();
 
             rateTable.innerHTML += `
+            // Wait for the row to be added
+setTimeout(() => {
+
+    const percent =
+        document.getElementById(`percent-${rate.currency}`);
+
+    const calculated =
+        document.getElementById(`calculated-${rate.currency}`);
+
+    if (!percent || !calculated) return;
+
+    percent.addEventListener("change", () => {
+
+        const official =
+            officialRates[rate.currency]
+                ? (1 / officialRates[rate.currency])
+                : 0;
+
+        const markup =
+            Number(percent.value);
+
+        const result =
+            official + (official * markup / 100);
+
+        calculated.innerHTML =
+            "₦" + result.toFixed(2);
+
+    });
+
+}, 100);
 
             <tr>
 
@@ -222,24 +252,52 @@ async function loadCurrencies() {
 
 window.saveRate = async function (currency, flag) {
 
-    const blackBuy = Number(
+    const percentDropdown =
+document.getElementById(`percent-${currency}`);
+
+let blackBuy;
+let blackSell;
+
+if (percentDropdown && Number(percentDropdown.value) > 0) {
+
+    const official =
+        officialRates[currency]
+            ? (1 / officialRates[currency])
+            : 0;
+
+    const markup =
+        Number(percentDropdown.value);
+
+    const calculated =
+        official + (official * markup / 100);
+
+    blackBuy = Number(calculated.toFixed(2));
+    blackSell = Number(calculated.toFixed(2));
+
+} else {
+
+    blackBuy = Number(
         document.getElementById(`buy-${currency}`).value
     );
 
-    const blackSell = Number(
+    blackSell = Number(
         document.getElementById(`sell-${currency}`).value
     );
+
+}
 
     try {
 
         await setDoc(
-            doc(db, "rates", currency),
-            {
-                currency: currency,
-                flag: flag,
-                blackBuy: blackBuy,
-                blackSell: blackSell
-            },
+            doc(db, "rates", {
+    currency: currency,
+    flag: flag,
+    blackBuy: blackBuy,
+    blackSell: blackSell,
+    markupPercent: percentDropdown
+        ? Number(percentDropdown.value)
+        : 0
+},
             { merge: true }
         );
 
