@@ -18,104 +18,29 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <body>
 
-<nav>
+<!-- ================= NAVIGATION ================= -->
+
+<nav class="navbar">
 
 <div class="logo">
+
 <i class="fa-solid fa-chart-line"></i>
-VikStock
+
+<span>VikStock</span>
+
 </div>
 
 <ul>
 
 <li><a href="#">Home</a></li>
 
-<li><a href="#official">Official</a></li>
+<li><a href="#featured">Featured</a></li>
 
-<li><a href="#black">Black Market</a></li>
+<li><a href="#official">Exchange Rates</a></li>
 
-<!-- <li><a href="admin.html">Admin</a></li> -->
+<li><a href="#contact">Contact</a></li>
 
 </ul>
-
-</nav>
-
-
-<header>
-
-<h1>Live Exchange Rates</h1>
-
-<p>
-
-Official & Black Market Currency Updates
-
-</p>
-
-<div class="search">
-
-<input
-type="text"
-id="search"
-placeholder="Search Currency...">
-
-</div>
-
-</header>
-
-
-
-<section id="official">
-
-<h2>
-
-🏦 Official Rates
-
-</h2>
-
-<div class="grid"
-
-id="officialRates">
-
-</div>
-
-</section>
-
-
-
-<section id="black">
-
-<h2>
-
-💵 Black Market
-
-</h2>
-
-<div class="grid"
-
-id="blackRates">
-
-</div>
-
-</section>
-
-
-
-<footer>
-
-<p>
-
-© 2026 VikStock
-
-</p>
-
-<p id="lastUpdated">
-
-Updating...
-
-</p>
-
-</footer>
-
-
 
 <button id="theme">
 
@@ -123,8 +48,400 @@ Updating...
 
 </button>
 
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<header class="hero">
+
+<div class="hero-content">
+
+<h1>
+
+Real-Time Exchange Rates
+
+</h1>
+
+<p>
+
+Official & Black Market Currency Updates
+
+</p>
+
+<p class="update">
+
+<i class="fa-solid fa-clock"></i>
+
+Updated Every Minute
+
+</p>
+
+</div>
+
+</header>
+
+<!-- ================= CONVERTER ================= -->
+
+<section class="converter">
+
+<h2>
+
+Currency Converter
+
+</h2>
+
+<div class="converter-box">
+
+<input
+type="number"
+id="amount"
+placeholder="Enter Amount"
+value="1">
+
+<select id="currencySelect">
+
+<option value="USD">🇺🇸 USD</option>
+
+<option value="GBP">🇬🇧 GBP</option>
+
+<option value="EUR">🇪🇺 EUR</option>
+
+<option value="PLN">🇵🇱 PLN</option>
+
+</select>
+
+<button id="convertBtn">
+
+Convert
+
+</button>
+
+</div>
+
+<div id="conversionResult">
+
+₦0.00
+
+</div>
+
+</section>
+
+<!-- ================= FEATURED ================= -->
+
+<section id="featured">
+
+<h2>
+
+⭐ Featured Currencies
+
+</h2>
+
+<div class="featured-grid">
+
+<div class="featured-card" id="usdCard">
+
+<h3>
+
+🇺🇸 USD
+
+</h3>
+
+<p>
+
+Official
+
+</p>
+
+<h1 id="usdOfficial">
+
+--
+
+</h1>
+
+<p>
+
+Black Market
+
+</p>
+
+<h2 id="usdBlack">
+
+--
+
+</h2>
+
+<span class="trend">
+
+📈
+
+</span>
+
+</div>
+
+<div class="featured-card" id="gbpCard">
+
+<h3>
+
+🇬🇧 GBP
+
+</h3>
+
+<p>
+
+Official
+
+</p>
+
+<h1 id="gbpOfficial">
+
+--
+
+</h1>
+
+<p>
+
+Black Market
+
+</p>
+
+<h2 id="gbpBlack">
+
+--
+
+</h2>
+
+<span class="trend">
+
+📈
+
+</span>
+
+</div>
+
+<div class="featured-card" id="eurCard">
+
+<h3>
+
+🇪🇺 EUR
+
+</h3>
+
+<p>
+
+Official
+
+</p>
+
+<h1 id="eurOfficial">
+
+--
+
+</h1>
+
+<p>
+
+Black Market
+
+</p>
+
+<h2 id="eurBlack">
+
+--
+
+</h2>
+
+<span class="trend">
+
+📈
+
+</span>
+
+</div>
+
+<div class="featured-card" id="plnCard">
+
+<h3>
+
+🇵🇱 PLN
+
+</h3>
+
+<p>
+
+Official
+
+</p>
+
+<h1 id="plnOfficial">
+
+--
+
+</h1>
+
+<p>
+
+Black Market
+
+</p>
+
+<h2 id="plnBlack">
+
+--
+
+</h2>
+
+<span class="trend">
+
+📈
+
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= SEARCH ================= -->
+
+<section class="search-section">
+
+<input
+
+type="text"
+
+id="search"
+
+placeholder="🔍 Search Currency...">
+
+</section>
 
 
+<section id="official">
+
+<h2>
+
+🌍 All Exchange Rates
+
+</h2>
+
+<div class="rates-wrapper">
+
+<div class="grid" id="officialRates">
+
+</div>
+
+<div class="grid" id="blackRates">
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<footer id="contact">
+
+<div class="footer-grid">
+
+<div>
+
+<h2>
+
+<i class="fa-solid fa-chart-line"></i>
+
+VikStock
+
+</h2>
+
+<p>
+
+Reliable Official & Black Market Exchange Rates.
+
+</p>
+
+</div>
+
+<div>
+
+<h3>
+
+Quick Links
+
+</h3>
+
+<a href="#">Home</a><br>
+
+<a href="#featured">Featured</a><br>
+
+<a href="#official">Exchange Rates</a>
+
+</div>
+
+<div>
+
+<h3>
+
+Contact
+
+</h3>
+
+<p>
+
+<i class="fa-brands fa-whatsapp"></i>
+
+WhatsApp
+
+</p>
+
+<p>
+
+<i class="fa-brands fa-instagram"></i>
+
+Instagram
+
+</p>
+
+<p>
+
+<i class="fa-brands fa-facebook"></i>
+
+Facebook
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<p id="lastUpdated">
+
+Updating...
+
+</p>
+
+<p>
+
+© 2026 VikStock. All Rights Reserved.
+
+</p>
+
+</footer>
+
+
+
+
+
+<a
+id="whatsappBtn"
+href="#">
+
+<i class="fa-brands fa-whatsapp"></i>
+
+</a>
 <script type="module" src="firebase-config.js"></script>
 
 <script type="module" src="script.js"></script>
