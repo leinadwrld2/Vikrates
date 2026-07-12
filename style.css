@@ -90,9 +90,9 @@ display:flex;
 
 align-items:center;
 
-gap:6px;
+gap:8px;
 
-font-size:20px;
+font-size:22px;
 
 font-weight:700;
 
@@ -102,7 +102,7 @@ color:var(--primary);
 
 .logo i{
 
-font-size:20px;
+font-size:22px;
 
 }
 
@@ -964,9 +964,9 @@ display:flex;
 
 align-items:center;
 
-gap:6px;
+gap:8px;
 
-font-size:20px;
+font-size:22px;
 
 font-weight:700;
 
@@ -976,7 +976,7 @@ color:var(--primary);
 
 .logo i{
 
-font-size:20px;
+font-size:22px;
 
 }
 
