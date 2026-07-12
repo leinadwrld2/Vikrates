@@ -228,7 +228,31 @@ themeBtn.innerHTML="🌙";
 
 };
 
+// Mobile Menu
 
+const menuBtn = document.getElementById("menuBtn");
+const closeMenu = document.getElementById("closeMenu");
+const mobileMenu = document.getElementById("mobileMenu");
+
+if (menuBtn) {
+
+menuBtn.addEventListener("click", () => {
+
+mobileMenu.classList.add("active");
+
+});
+
+}
+
+if (closeMenu) {
+
+closeMenu.addEventListener("click", () => {
+
+mobileMenu.classList.remove("active");
+
+});
+
+}
 
 // ---------- Auto Refresh ----------
 
