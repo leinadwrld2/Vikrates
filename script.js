@@ -59,6 +59,13 @@ const officialRates = await getOfficialRates();
 
 const snapshot =
 await getDocs(collection(db,"rates"));
+const firestoreRates=[];
+
+snapshot.forEach(doc=>{
+
+firestoreRates.push(doc.data());
+
+});    
 
 officialContainer.innerHTML="";
 blackContainer.innerHTML="";
@@ -139,7 +146,7 @@ Black Sell
 blackContainer.innerHTML+=card2;
 
 });
-
+updatePopular(officialRates, firestoreRates);
 }
 catch(error){
 
@@ -156,6 +163,47 @@ console.log(error);
 
 loadRates();
 
+/*==============================
+  POPULAR CURRENCIES
+==============================*/
+
+function updatePopular(officialRates, firestoreRates){
+
+const currencies=["USD","GBP","EUR","PLN"];
+
+currencies.forEach(currency=>{
+
+const rate=firestoreRates.find(r=>r.currency===currency);
+
+if(!rate) return;
+
+const official=
+officialRates && officialRates[currency]
+? (1/officialRates[currency]).toFixed(2)
+: "N/A";
+
+const officialElement=
+document.getElementById(currency.toLowerCase()+"Official");
+
+const blackElement=
+document.getElementById(currency.toLowerCase()+"Black");
+
+if(officialElement){
+
+officialElement.innerHTML="₦"+official;
+
+}
+
+if(blackElement){
+
+blackElement.innerHTML=
+"Black: ₦"+rate.blackBuy;
+
+}
+
+});
+
+}
 
 
 // ---------- Search ----------
