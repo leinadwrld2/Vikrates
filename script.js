@@ -169,6 +169,19 @@ loadRates();
 
 function updatePopular(officialRates, firestoreRates){
 
+ const updated=document.getElementById(currency.toLowerCase()+"Updated");
+
+if(updated){
+
+updated.innerHTML="Updated "+new Date().toLocaleTimeString([],{
+
+hour:"2-digit",
+
+minute:"2-digit"
+
+});
+
+}   
 const currencies=["USD","GBP","EUR","PLN"];
 
 currencies.forEach(currency=>{
