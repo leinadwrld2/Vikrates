@@ -169,19 +169,6 @@ loadRates();
 
 function updatePopular(officialRates, firestoreRates){
 
- const updated=document.getElementById(currency.toLowerCase()+"Updated");
-
-if(updated){
-
-updated.innerHTML="Updated "+new Date().toLocaleTimeString([],{
-
-hour:"2-digit",
-
-minute:"2-digit"
-
-});
-
-}   
 const currencies=["USD","GBP","EUR","PLN"];
 
 currencies.forEach(currency=>{
@@ -201,6 +188,9 @@ document.getElementById(currency.toLowerCase()+"Official");
 const blackElement=
 document.getElementById(currency.toLowerCase()+"Black");
 
+const updatedElement=
+document.getElementById(currency.toLowerCase()+"Updated");
+
 if(officialElement){
 
 officialElement.innerHTML="₦"+official;
@@ -211,6 +201,17 @@ if(blackElement){
 
 blackElement.innerHTML=
 "Black: ₦"+rate.blackBuy;
+
+}
+
+if(updatedElement){
+
+updatedElement.innerHTML=
+"Updated "+
+new Date().toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+});
 
 }
 
