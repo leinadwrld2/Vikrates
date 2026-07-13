@@ -1684,5 +1684,61 @@ box-shadow:0 0 20px rgba(0,0,0,.25);
 font-size:50px;
 
 }
+   .updated{
+
+margin-top:10px;
+
+font-size:13px;
+
+color:#8fa5be;
+
+}
+
+.sparkline{
+
+display:flex;
+
+align-items:flex-end;
+
+gap:4px;
+
+height:40px;
+
+margin-top:18px;
+
+}
+
+.sparkline span{
+
+width:5px;
+
+background:#4ea8ff;
+
+border-radius:20px;
+
+animation:pulse 2s infinite;
+
+}
+
+.sparkline span:nth-child(1){height:12px;}
+.sparkline span:nth-child(2){height:20px;}
+.sparkline span:nth-child(3){height:16px;}
+.sparkline span:nth-child(4){height:28px;}
+.sparkline span:nth-child(5){height:22px;}
+.sparkline span:nth-child(6){height:35px;}
+.sparkline span:nth-child(7){height:30px;}
+.sparkline span:nth-child(8){height:40px;}
+
+@keyframes pulse{
+
+50%{
+
+opacity:.5;
+
+transform:scaleY(.9);
+
+}
+
+}
 }
 
