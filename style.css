@@ -62,41 +62,45 @@ display:block;
 
 .hero{
 
-padding:120px 25px 70px;
+position:relative;
 
-text-align:left;
+display:flex;
 
-max-width:700px;
+align-items:center;
+
+justify-content:space-between;
+
+max-width:1200px;
 
 margin:auto;
 
+padding:170px 25px 110px;
+
+min-height:90vh;
+
+overflow:hidden;
+
 }
 
-.hero-badge{
+.hero-content{
 
-display:inline-block;
+position:relative;
 
-padding:8px 16px;
+z-index:5;
 
-background:#13253b;
-
-border-radius:30px;
-
-color:#4ea8ff;
-
-font-weight:600;
-
-margin-bottom:20px;
+max-width:620px;
 
 }
 
 .hero h1{
 
-font-size:58px;
+font-size:72px;
 
 font-weight:800;
 
-line-height:1;
+line-height:.95;
+
+letter-spacing:-2px;
 
 margin-bottom:25px;
 
@@ -104,41 +108,49 @@ margin-bottom:25px;
 
 .hero p{
 
-font-size:22px;
+font-size:21px;
+
+line-height:1.8;
 
 color:#b9c6d4;
 
-line-height:1.6;
-
 margin-bottom:35px;
+
+max-width:560px;
 
 }
 
 .hero-btn{
 
-display:inline-block;
+display:inline-flex;
 
-padding:18px 40px;
+justify-content:center;
+
+align-items:center;
+
+width:320px;
+
+height:70px;
 
 background:#4ea8ff;
 
-color:#fff;
-
 border-radius:40px;
 
-font-size:18px;
+font-size:22px;
 
-font-weight:600;
+font-weight:700;
 
-transition:.3s;
+transition:.35s;
+
+box-shadow:0 15px 35px rgba(78,168,255,.35);
 
 }
 
 .hero-btn:hover{
 
-transform:translateY(-3px);
+transform:translateY(-4px);
 
-background:#2b93ff;
+background:#3397ff;
 
 }
 
@@ -336,7 +348,71 @@ right:20px;
 font-size:24px;
 
 }
+.features{
 
+max-width:1200px;
+
+margin:auto;
+
+padding:30px 25px 90px;
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+gap:30px;
+
+}
+
+.feature-card{
+
+background:#13253b;
+
+padding:35px;
+
+border-radius:22px;
+
+transition:.35s;
+
+border:1px solid rgba(255,255,255,.05);
+
+}
+
+.feature-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 20px 40px rgba(0,0,0,.35);
+
+}
+
+.feature-card span{
+
+font-size:45px;
+
+display:block;
+
+margin-bottom:18px;
+
+}
+
+.feature-card h3{
+
+font-size:30px;
+
+margin-bottom:15px;
+
+}
+
+.feature-card p{
+
+font-size:18px;
+
+line-height:1.8;
+
+color:#b9c6d4;
+
+}
 /* ===========================
    SEARCH
 =========================== */
@@ -1025,13 +1101,13 @@ overflow:hidden;
 
 position:absolute;
 
-right:-120px;
+right:-230px;
 
 top:40px;
 
-width:650px;
+width:760px;
 
-height:650px;
+height:760px;
 
 display:flex;
 
@@ -1039,12 +1115,13 @@ justify-content:center;
 
 align-items:center;
 
+opacity:.35;
+
 pointer-events:none;
 
-opacity:.45;
+z-index:1;
 
 }
-
 .globe{
 
 width:340px;
