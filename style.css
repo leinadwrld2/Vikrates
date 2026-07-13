@@ -343,22 +343,45 @@ transform:translateY(-6px);
 .icon-box{
 
 width:74px;
-
 height:74px;
 
 display:flex;
-
 justify-content:center;
-
 align-items:center;
 
-background:#10213d;
+background:#132845;
 
-border-radius:18px;
+border-radius:20px;
 
 font-size:34px;
+color:#4ea8ff;
+
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+}
+.hero-badge i{
+
+margin-right:10px;
+
+font-size:18px;
 
 color:#4ea8ff;
+
+}
+
+.hero-contact i{
+
+margin-left:15px;
+
+font-size:30px;
+
+transition:.3s;
+
+}
+
+.hero-contact:hover i{
+
+transform:translateX(8px);
 
 }
 
