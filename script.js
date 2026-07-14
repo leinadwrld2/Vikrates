@@ -153,78 +153,47 @@ officialRates && officialRates[currency]
 const officialElement=
 document.getElementById(currency.toLowerCase()+"Official");
 
-const trendText=
+const trendText =
 document.getElementById(currency.toLowerCase()+"Trend");
 
-const trendIcon=
+const trendIcon =
 document.getElementById(currency.toLowerCase()+"TrendIcon");
 
-const updatedElement=
-document.getElementById(currency.toLowerCase()+"Updated");
+const trendBox =
+document.getElementById(currency.toLowerCase()+"TrendBox");
 
-if(officialElement){
+const currentRate = parseFloat(official);
 
-officialElement.innerHTML="₦"+official;
-
-}
-
-if(updatedElement){
-
-updatedElement.innerHTML=
-"Updated "+
-new Date().toLocaleTimeString([],{
-hour:"2-digit",
-minute:"2-digit"
-});
-
-}
-
-if(!trendText || !trendIcon) return;
-
-const trendBox=trendIcon.parentElement;
-
-const currentRate=parseFloat(official);
-
-const previousRate=
+const previousRate =
 parseFloat(localStorage.getItem(currency));
 
 if(!isNaN(previousRate)){
 
-const change=
-((currentRate-previousRate)/previousRate)*100;
+const change =
+((currentRate - previousRate) / previousRate) * 100;
 
-const percent=
+const percent =
 Math.abs(change).toFixed(2);
 
-if(change>=0){
+if(change >= 0){
 
-trendBox.className="trend up";
-
-trendIcon.className=
-"fa-solid fa-arrow-trend-up";
-
-trendText.innerHTML = `${percent}%`;
+trendBox.className = "rate-change up";
+trendIcon.className = "fa-solid fa-arrow-trend-up";
+trendText.innerHTML = percent + "%";
 
 }else{
 
-trendBox.className="trend down";
-
-trendIcon.className=
-"fa-solid fa-arrow-trend-down";
-
-trendText.innerHTML = `${percent}%`;
+trendBox.className = "rate-change down";
+trendIcon.className = "fa-solid fa-arrow-trend-down";
+trendText.innerHTML = percent + "%";
 
 }
 
 }else{
 
-trendBox.className="trend up";
-
-trendIcon.className=
-"fa-solid fa-minus";
-
-trendText.innerHTML=
-"0.00% Today";
+trendBox.className = "rate-change up";
+trendIcon.className = "fa-solid fa-arrow-right";
+trendText.innerHTML = "0.00%";
 
 }
 
