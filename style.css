@@ -1540,24 +1540,22 @@ color:#9ca8bc;
 }
 
 .popular-card h1{
-    margin:20px 0 12px;
-    font-size:48px;
-    font-weight:700;
-    color:#fff;
+margin:35px 0 20px;
+font-size:48px;
+font-weight:700;
+color:#fff;
 }
 
 .trend{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin:10px 0;
-    padding:8px 12px;
-    width:fit-content;
-    border-radius:30px;
-    font-size:14px;
-    font-weight:600;
-    position:relative;
-    z-index:5;
+display:inline-flex;
+align-items:center;
+gap:8px;
+margin:18px 0 12px;
+padding:6px 12px;
+border-radius:30px;
+font-size:14px;
+font-weight:600;
+width:max-content;
 }
 
 .trend.up{
@@ -1680,9 +1678,11 @@ font-size:50px;
    
 }
 .updated{
-    margin-top:12px;
-    display:block;
+margin-top:0;
+font-size:13px;
+color:#8fa5be;
 }
+
 
 .sparkline{
 
