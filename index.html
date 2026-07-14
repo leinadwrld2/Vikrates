@@ -428,45 +428,145 @@ Updated just now
 </section>
 
  <!--==========================
-     CURRENCY CONVERTER
+    CURRENCY CONVERTER V2
 ===========================-->
 
 <section class="converter-section">
 
-<div class="converter-container">
+<div class="converter-card">
+
+<div class="converter-header">
 
 <h2>Currency Converter</h2>
 
-<p>Convert currencies using live official exchange rates.</p>
+<p>Convert over 160 world currencies using live official rates.</p>
 
-<div class="converter-box">
+</div>
+
+<!-- Amount -->
+
+<div class="input-group">
+
+<label>Amount</label>
 
 <input
 type="number"
 id="amount"
 value="1"
-min="1"
-placeholder="Amount">
-
-<div class="converter-row">
-
-<select id="fromCurrency"></select>
-
-<button id="swapBtn">
-<i class="fa-solid fa-right-left"></i>
-</button>
-
-<select id="toCurrency"></select>
+min="0"
+placeholder="Enter amount">
 
 </div>
 
-<button id="convertBtn">
+<!-- Currency Row -->
+
+<div class="currency-row">
+
+<!-- FROM -->
+
+<div class="currency-box">
+
+<label>From</label>
+
+<div class="custom-select" id="fromSelect">
+
+<div class="selected">
+
+<img
+id="fromFlag"
+src="https://flagcdn.com/w40/us.png"
+alt="">
+
+<div>
+
+<h4 id="fromCode">USD</h4>
+
+<p id="fromName">
+US Dollar
+</p>
+
+</div>
+
+<i class="fa-solid fa-chevron-down"></i>
+
+</div>
+
+<div class="options" id="fromOptions">
+
+<!-- JavaScript fills this -->
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Swap -->
+
+<button id="swapBtn">
+
+<i class="fa-solid fa-right-left"></i>
+
+</button>
+
+<!-- TO -->
+
+<div class="currency-box">
+
+<label>To</label>
+
+<div class="custom-select" id="toSelect">
+
+<div class="selected">
+
+<img
+id="toFlag"
+src="https://flagcdn.com/w40/ng.png"
+alt="">
+
+<div>
+
+<h4 id="toCode">NGN</h4>
+
+<p id="toName">
+
+Nigerian Naira
+
+</p>
+
+</div>
+
+<i class="fa-solid fa-chevron-down"></i>
+
+</div>
+
+<div class="options" id="toOptions">
+
+<!-- JavaScript fills this -->
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Convert -->
+
+<button
+id="convertBtn"
+class="convert-btn">
 
 Convert Currency
 
 </button>
 
-<div class="converter-result">
+<!-- Result -->
+
+<div class="result-card">
+
+<h5>Conversion Result</h5>
 
 <h1 id="conversionResult">
 
@@ -474,13 +574,11 @@ Convert Currency
 
 </h1>
 
-<p>
+<p id="converterRate">
 
-Live Official Rate
+Live Official Exchange Rate
 
 </p>
-
-</div>
 
 </div>
 
