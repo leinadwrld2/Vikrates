@@ -114,6 +114,8 @@ Black Sell
 });
 
 updatePopular(officialRates,firestoreRates);
+  converterRates = officialRates;
+initializeConverter();
 
 }catch(error){
 
