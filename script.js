@@ -558,6 +558,7 @@ ${currency}
 
 fromCurrency.value="USD";
 toCurrency.value="NGN";
+  
 
 /* Update custom UI */
 
@@ -602,47 +603,45 @@ document.getElementById("converterRate").innerHTML =
 
 }
 if(
-
 amountInput &&
-
 fromCurrency &&
-
 toCurrency &&
-
 convertBtn &&
-
 swapBtn &&
-
 conversionResult
-
 ){
-swapBtn.onclick=()=>{
 
-const temp=
+convertBtn.onclick = convertCurrency;
 
-fromCurrency.value;
+amountInput.oninput = convertCurrency;
 
-fromCurrency.value=
+fromCurrency.onchange = ()=>{
 
-toCurrency.value;
+updateSelected("from", fromCurrency.value);
 
-toCurrency.value=temp;
+convertCurrency();
 
-updateSelected(
+};
 
-"from",
+toCurrency.onchange = ()=>{
 
-fromCurrency.value
+updateSelected("to", toCurrency.value);
 
-);
+convertCurrency();
 
-updateSelected(
+};
 
-"to",
+swapBtn.onclick = ()=>{
 
-toCurrency.value
+const temp = fromCurrency.value;
 
-);
+fromCurrency.value = toCurrency.value;
+
+toCurrency.value = temp;
+
+updateSelected("from", fromCurrency.value);
+
+updateSelected("to", toCurrency.value);
 
 convertCurrency();
 
