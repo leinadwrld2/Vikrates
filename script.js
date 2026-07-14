@@ -325,16 +325,16 @@ document.getElementById("conversionResult");
 
 let converterRates = null;
 
-async function initializeConverter(){
-
-converterRates = await getOfficialRates();
+function initializeConverter(){
 
 if(!converterRates) return;
 
 fromCurrency.innerHTML = "";
 toCurrency.innerHTML = "";
 
-Object.keys(converterRates).sort().forEach(currency=>{
+Object.keys(converterRates)
+.sort()
+.forEach(currency=>{
 
 fromCurrency.innerHTML +=
 `<option value="${currency}">${currency}</option>`;
@@ -365,14 +365,30 @@ const ngnPerTo = 1 / converterRates[to];
 
 const result = amount * ngnPerFrom / ngnPerTo;
 
-conversionResult.innerHTML =
-new Intl.NumberFormat("en-NG",{
+const formatter = new Intl.NumberFormat("en",{
 style:"currency",
-currency:"NGN"
-}).format(result);
+currency:to,
+maximumFractionDigits:2
+});
+
+conversionResult.innerHTML = formatter.format(result);
 
 }
+if(
 
+amountInput &&
+
+fromCurrency &&
+
+toCurrency &&
+
+convertBtn &&
+
+swapBtn &&
+
+conversionResult
+
+){
 convertBtn.addEventListener("click",convertCurrency);
 
 amountInput.addEventListener("input",convertCurrency);
@@ -392,6 +408,8 @@ toCurrency.value = temp;
 convertCurrency();
 
 });
+
+}
 /*==============================
  AUTO REFRESH
 ==============================*/
