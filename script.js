@@ -161,8 +161,19 @@ document.getElementById(currency.toLowerCase()+"TrendIcon");
 
 const trendBox =
 document.getElementById(currency.toLowerCase()+"TrendBox");
+  if(
+!officialElement ||
+!trendText ||
+!trendIcon ||
+!trendBox
+){
+    return;
+}
+  officialElement.innerHTML = "₦" + official;
 
-const currentRate = parseFloat(official);
+if(official==="N/A") return;
+
+const currentRate=parseFloat(official);
 
 const previousRate =
 parseFloat(localStorage.getItem(currency));
@@ -199,10 +210,23 @@ trendText.innerHTML = "0.00%";
 
 localStorage.setItem(currency,currentRate);
 
+const updatedElement =
+document.getElementById(currency.toLowerCase()+"Updated");
+
+if(updatedElement){
+
+updatedElement.innerHTML =
+"Updated " +
+new Date().toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
 });
 
 }
+  
+}); // closes currencies.forEach()
 
+}
 /*==============================
  SEARCH
 ==============================*/
