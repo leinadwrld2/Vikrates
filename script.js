@@ -185,22 +185,12 @@ officialRates && officialRates[currency]
 const officialElement=
 document.getElementById(currency.toLowerCase()+"Official");
 
-const blackElement=
-document.getElementById(currency.toLowerCase()+"Black");
-
-const updatedElement=
+const updatedElement =
 document.getElementById(currency.toLowerCase()+"Updated");
 
 if(officialElement){
 
 officialElement.innerHTML="₦"+official;
-
-}
-
-if(blackElement){
-
-blackElement.innerHTML=
-"Black: ₦"+rate.blackBuy;
 
 }
 
@@ -215,14 +205,11 @@ minute:"2-digit"
     const trendText =
 document.getElementById(currency.toLowerCase()+"Trend");
 
-const trendBox =
-document.getElementById(currency.toLowerCase()+"TrendBox");
-
 const trendIcon =
 document.getElementById(currency.toLowerCase()+"TrendIcon");
 
-const updated =
-document.getElementById(currency.toLowerCase()+"Updated");
+const trendBox =
+trendIcon.parentElement;
 
 const currentRate = parseFloat(official);
 
