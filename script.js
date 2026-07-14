@@ -330,66 +330,70 @@ let converterRates = null;
 
 const currencyInfo = {
 
-USD:{
-name:"US Dollar",
-flag:"https://flagcdn.com/w40/us.png"
-},
-
-NGN:{
-name:"Nigerian Naira",
-flag:"https://flagcdn.com/w40/ng.png"
-},
-
-GBP:{
-name:"British Pound",
-flag:"https://flagcdn.com/w40/gb.png"
-},
-
-EUR:{
-name:"Euro",
-flag:"https://flagcdn.com/w40/eu.png"
-},
-
-PLN:{
-name:"Polish Zloty",
-flag:"https://flagcdn.com/w40/pl.png"
-},
-
-CAD:{
-name:"Canadian Dollar",
-flag:"https://flagcdn.com/w40/ca.png"
-},
-
-AUD:{
-name:"Australian Dollar",
-flag:"https://flagcdn.com/w40/au.png"
-},
-
-JPY:{
-name:"Japanese Yen",
-flag:"https://flagcdn.com/w40/jp.png"
-},
-
-CNY:{
-name:"Chinese Yuan",
-flag:"https://flagcdn.com/w40/cn.png"
-},
-
-CHF:{
-name:"Swiss Franc",
-flag:"https://flagcdn.com/w40/ch.png"
-}
+USD:{name:"US Dollar",country:"us"},
+NGN:{name:"Nigerian Naira",country:"ng"},
+GBP:{name:"British Pound",country:"gb"},
+EUR:{name:"Euro",country:"eu"},
+PLN:{name:"Polish Zloty",country:"pl"},
+CAD:{name:"Canadian Dollar",country:"ca"},
+AUD:{name:"Australian Dollar",country:"au"},
+JPY:{name:"Japanese Yen",country:"jp"},
+CNY:{name:"Chinese Yuan",country:"cn"},
+CHF:{name:"Swiss Franc",country:"ch"}
 
 };
-function createOption(currency){
 
-const info = currencyInfo[currency] || {
+function getCurrencyInfo(currency){
+
+if(currencyInfo[currency]){
+
+return{
+
+name:currencyInfo[currency].name,
+
+flag:`https://flagcdn.com/w40/${currencyInfo[currency].country}.png`
+
+};
+
+}
+
+const country = currency.substring(0,2).toLowerCase();
+
+return{
 
 name:currency,
 
-flag:"https://flagcdn.com/w40/un.png"
+flag:`https://flagcdn.com/w40/${country}.png`
 
 };
+
+}
+
+function createOption(currency){
+
+const info = getCurrencyInfo(currency);
+
+return `
+
+<div class="option" data-currency="${currency}">
+
+<img
+src="${info.flag}"
+onerror="this.src='https://flagcdn.com/w40/un.png'">
+
+<div>
+
+<h4>${currency}</h4>
+
+<p>${info.name}</p>
+
+</div>
+
+</div>
+
+`;
+
+}
 
 return `
 
@@ -414,29 +418,21 @@ data-currency="${currency}">
 }
 function updateSelected(type,currency){
 
-const info=
+const info = getCurrencyInfo(currency);
 
-currencyInfo[currency]||
+document.getElementById(type+"Code").innerHTML = currency;
 
-{
+document.getElementById(type+"Name").innerHTML = info.name;
 
-name:currency,
+const flag = document.getElementById(type+"Flag");
 
-flag:"https://flagcdn.com/40x30/un.png"
+flag.src = info.flag;
+
+flag.onerror = ()=>{
+
+flag.src = "https://flagcdn.com/w40/un.png";
 
 };
-
-document.getElementById(type+"Code").innerHTML=
-
-currency;
-
-document.getElementById(type+"Name").innerHTML=
-
-info.name;
-
-document.getElementById(type+"Flag").src=
-
-info.flag;
 
 }
 function initializeCustomDropdowns(){
@@ -460,7 +456,22 @@ fromOptions.innerHTML+=createOption(currency);
 toOptions.innerHTML+=createOption(currency);
 
 });
+  
+document.addEventListener("click",(e)=>{
 
+if(!fromSelect.contains(e.target)){
+
+fromSelect.classList.remove("active");
+
+}
+
+if(!toSelect.contains(e.target)){
+
+toSelect.classList.remove("active");
+
+}
+
+});
 document.querySelectorAll("#fromOptions .option")
 
 .forEach(option=>{
