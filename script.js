@@ -212,6 +212,73 @@ new Date().toLocaleTimeString([],{
 hour:"2-digit",
 minute:"2-digit"
 });
+    const trendText =
+document.getElementById(currency.toLowerCase()+"Trend");
+
+const trendBox =
+document.getElementById(currency.toLowerCase()+"TrendBox");
+
+const trendIcon =
+document.getElementById(currency.toLowerCase()+"TrendIcon");
+
+const updated =
+document.getElementById(currency.toLowerCase()+"Updated");
+
+const currentRate = parseFloat(official);
+
+const previousRate =
+parseFloat(localStorage.getItem(currency));
+
+if(previousRate){
+
+const change =
+((currentRate-previousRate)/previousRate)*100;
+
+const percent =
+Math.abs(change).toFixed(2);
+
+if(change>=0){
+
+trendBox.className="trend up";
+
+trendIcon.className=
+"fa-solid fa-arrow-trend-up";
+
+trendText.innerHTML=
+`+${percent}% Today`;
+
+}else{
+
+trendBox.className="trend down";
+
+trendIcon.className=
+"fa-solid fa-arrow-trend-down";
+
+trendText.innerHTML=
+`-${percent}% Today`;
+
+}
+
+}else{
+
+trendBox.className="trend up";
+
+trendIcon.className=
+"fa-solid fa-minus";
+
+trendText.innerHTML=
+"0.00% Today";
+
+}
+
+localStorage.setItem(currency,currentRate);
+
+updated.innerHTML=
+"Updated "+
+new Date().toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+});
 
 }
 
