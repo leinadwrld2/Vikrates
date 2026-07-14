@@ -288,29 +288,6 @@ updateTime();
 
 setInterval(updateTime,1000);
 
-/*==============================
- DARK MODE
-==============================*/
-
-if(themeBtn){
-
-themeBtn.onclick=()=>{
-
-document.body.classList.toggle("light");
-
-if(document.body.classList.contains("light")){
-
-themeBtn.innerHTML="☀️";
-
-}else{
-
-themeBtn.innerHTML="🌙";
-
-}
-
-};
-
-}
 
 /*==============================
  MOBILE MENU
