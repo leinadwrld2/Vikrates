@@ -1299,6 +1299,39 @@ transition:.3s;
 background:#162746;
 
 }
+.mobile-menu{
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:280px;
+    height:100%;
+    background:#101827;
+    transition:.35s;
+    z-index:10000;
+    padding:80px 25px;
+}
+
+.mobile-menu.active{
+    right:0;
+}
+
+.mobile-menu a{
+    display:block;
+    padding:15px 0;
+    color:#fff;
+    font-size:18px;
+}
+
+.close-btn{
+    position:absolute;
+    top:20px;
+    right:20px;
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:28px;
+    cursor:pointer;
+}
 .contact-btn{
 
 display:flex;
