@@ -1546,35 +1546,32 @@ font-weight:700;
 color:#fff;
 }
 
-.trend{
+.rate-change{
 display:flex;
 align-items:center;
-gap:8px;
-margin-top:12px;
-font-size:18px;
-font-weight:600;
-background:none;
-padding:0;
-border-radius:0;  
-position:relative;
+gap:10px;
+margin-top:18px;
+font-size:22px;
+font-weight:700;
+transition:.3s;
 }
 
-.trend.up{
-
+.rate-change.up{
 color:#22c55e;
-
 }
 
-.trend.down{
-
+.rate-change.down{
 color:#ef4444;
-
 }
 
-.trend i{
+.rate-change i{
+font-size:24px;
+}
 
-font-size:16px;
-
+.updated{
+margin-top:10px;
+font-size:15px;
+color:#8fa5be;
 }
 
 /*=========================
@@ -1680,14 +1677,6 @@ display:block;
 font-size:50px;
 
 }
-   
-}
-.updated{
-margin-top:0;
-font-size:13px;
-color:#8fa5be;
-}
-
 
 .sparkline{
 
