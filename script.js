@@ -324,28 +324,252 @@ const conversionResult =
 document.getElementById("conversionResult");
 
 let converterRates = null;
+/*==============================
+ CUSTOM DROPDOWN DATA
+==============================*/
 
-function initializeConverter(){
+const currencyInfo = {
 
-if(!converterRates) return;
+USD:{
+name:"US Dollar",
+flag:"https://flagcdn.com/w40/us.png"
+},
 
-fromCurrency.innerHTML = "";
-toCurrency.innerHTML = "";
+NGN:{
+name:"Nigerian Naira",
+flag:"https://flagcdn.com/w40/ng.png"
+},
 
-Object.keys(converterRates)
-.sort()
-.forEach(currency=>{
+GBP:{
+name:"British Pound",
+flag:"https://flagcdn.com/w40/gb.png"
+},
 
-fromCurrency.innerHTML +=
-`<option value="${currency}">${currency}</option>`;
+EUR:{
+name:"Euro",
+flag:"https://flagcdn.com/w40/eu.png"
+},
 
-toCurrency.innerHTML +=
-`<option value="${currency}">${currency}</option>`;
+PLN:{
+name:"Polish Zloty",
+flag:"https://flagcdn.com/w40/pl.png"
+},
+
+CAD:{
+name:"Canadian Dollar",
+flag:"https://flagcdn.com/w40/ca.png"
+},
+
+AUD:{
+name:"Australian Dollar",
+flag:"https://flagcdn.com/w40/au.png"
+},
+
+JPY:{
+name:"Japanese Yen",
+flag:"https://flagcdn.com/w40/jp.png"
+},
+
+CNY:{
+name:"Chinese Yuan",
+flag:"https://flagcdn.com/w40/cn.png"
+},
+
+CHF:{
+name:"Swiss Franc",
+flag:"https://flagcdn.com/w40/ch.png"
+}
+
+};
+function createOption(currency){
+
+const info = currencyInfo[currency] || {
+
+name:currency,
+
+flag:"https://flagcdn.com/w40/un.png"
+
+};
+
+return `
+
+<div class="option"
+
+data-currency="${currency}">
+
+<img src="${info.flag}">
+
+<div>
+
+<h4>${currency}</h4>
+
+<p>${info.name}</p>
+
+</div>
+
+</div>
+
+`;
+
+}
+function updateSelected(type,currency){
+
+const info=
+
+currencyInfo[currency]||
+
+{
+
+name:currency,
+
+flag:"https://flagcdn.com/40x30/un.png"
+
+};
+
+document.getElementById(type+"Code").innerHTML=
+
+currency;
+
+document.getElementById(type+"Name").innerHTML=
+
+info.name;
+
+document.getElementById(type+"Flag").src=
+
+info.flag;
+
+}
+function initializeCustomDropdowns(){
+
+const fromSelect=document.getElementById("fromSelect");
+
+const toSelect=document.getElementById("toSelect");
+
+const fromOptions=document.getElementById("fromOptions");
+
+const toOptions=document.getElementById("toOptions");
+
+fromOptions.innerHTML="";
+
+toOptions.innerHTML="";
+
+Object.keys(converterRates).sort().forEach(currency=>{
+
+fromOptions.innerHTML+=createOption(currency);
+
+toOptions.innerHTML+=createOption(currency);
 
 });
 
-fromCurrency.value = "USD";
-toCurrency.value = "NGN";
+document.querySelectorAll("#fromOptions .option")
+
+.forEach(option=>{
+
+option.onclick=()=>{
+
+const currency=
+
+option.dataset.currency;
+
+fromCurrency.value=currency;
+
+updateSelected("from",currency);
+
+convertCurrency();
+
+fromSelect.classList.remove("active");
+
+};
+
+});
+
+document.querySelectorAll("#toOptions .option")
+
+.forEach(option=>{
+
+option.onclick=()=>{
+
+const currency=
+
+option.dataset.currency;
+
+toCurrency.value=currency;
+
+updateSelected("to",currency);
+
+convertCurrency();
+
+toSelect.classList.remove("active");
+
+};
+
+});
+
+fromSelect.querySelector(".selected")
+
+.onclick=()=>{
+
+fromSelect.classList.toggle("active");
+
+};
+
+toSelect.querySelector(".selected")
+
+.onclick=()=>{
+
+toSelect.classList.toggle("active");
+
+};
+
+}
+
+async function initializeConverter(){
+
+if(!converterRates){
+
+converterRates = await getOfficialRates();
+
+}
+
+if(!converterRates) return;
+
+/* Hidden selects */
+
+fromCurrency.innerHTML="";
+toCurrency.innerHTML="";
+
+Object.keys(converterRates)
+
+.sort()
+
+.forEach(currency=>{
+
+fromCurrency.innerHTML+=
+`<option value="${currency}">
+${currency}
+</option>`;
+
+toCurrency.innerHTML+=
+`<option value="${currency}">
+${currency}
+</option>`;
+
+});
+
+fromCurrency.value="USD";
+toCurrency.value="NGN";
+
+/* Update custom UI */
+
+updateSelected("from","USD");
+
+updateSelected("to","NGN");
+
+/* Build dropdown */
+
+initializeCustomDropdowns();
+
+/* Convert */
 
 convertCurrency();
 
@@ -360,10 +584,10 @@ const amount = parseFloat(amountInput.value) || 0;
 const from = fromCurrency.value;
 const to = toCurrency.value;
 
-const ngnPerFrom = 1 / converterRates[from];
-const ngnPerTo = 1 / converterRates[to];
+const ngnFrom = 1 / converterRates[from];
+const ngnTo = 1 / converterRates[to];
 
-const result = amount * ngnPerFrom / ngnPerTo;
+const result = amount * ngnFrom / ngnTo;
 
 const formatter = new Intl.NumberFormat("en",{
 style:"currency",
@@ -372,6 +596,9 @@ maximumFractionDigits:2
 });
 
 conversionResult.innerHTML = formatter.format(result);
+
+document.getElementById("converterRate").innerHTML =
+`1 ${from} = ${(ngnFrom/ngnTo).toFixed(4)} ${to}`;
 
 }
 if(
@@ -389,25 +616,37 @@ swapBtn &&
 conversionResult
 
 ){
-convertBtn.addEventListener("click",convertCurrency);
+swapBtn.onclick=()=>{
 
-amountInput.addEventListener("input",convertCurrency);
+const temp=
 
-fromCurrency.addEventListener("change",convertCurrency);
+fromCurrency.value;
 
-toCurrency.addEventListener("change",convertCurrency);
+fromCurrency.value=
 
-swapBtn.addEventListener("click",()=>{
+toCurrency.value;
 
-const temp = fromCurrency.value;
+toCurrency.value=temp;
 
-fromCurrency.value = toCurrency.value;
+updateSelected(
 
-toCurrency.value = temp;
+"from",
+
+fromCurrency.value
+
+);
+
+updateSelected(
+
+"to",
+
+toCurrency.value
+
+);
 
 convertCurrency();
 
-});
+};
 
 }
 /*==============================
