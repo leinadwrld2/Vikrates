@@ -203,8 +203,7 @@ trendBox.className="trend up";
 trendIcon.className=
 "fa-solid fa-arrow-trend-up";
 
-trendText.innerHTML=
-`+${percent}% Today`;
+trendText.innerHTML = `${percent}%`;
 
 }else{
 
@@ -213,8 +212,7 @@ trendBox.className="trend down";
 trendIcon.className=
 "fa-solid fa-arrow-trend-down";
 
-trendText.innerHTML=
-`-${percent}% Today`;
+trendText.innerHTML = `${percent}%`;
 
 }
 
