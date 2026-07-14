@@ -1574,29 +1574,30 @@ color:#fff;
 }
 
 .trend{
-
-display:flex;
-
+display:inline-flex;
 align-items:center;
-
-gap:10px;
-
-font-size:22px;
-
+gap:8px;
+margin-top:12px;
+padding:6px 12px;
+border-radius:30px;
+font-size:14px;
 font-weight:600;
-
+width:max-content;
+transition:.3s;
 }
 
 .trend.up{
-
+background:rgba(34,197,94,.15);
 color:#22c55e;
-
 }
 
 .trend.down{
-
+background:rgba(239,68,68,.15);
 color:#ef4444;
+}
 
+.trend i{
+font-size:14px;
 }
 
 /*=========================
@@ -1702,7 +1703,9 @@ display:block;
 font-size:50px;
 
 }
-   .updated{
+   
+}
+.updated{
 
 margin-top:10px;
 
@@ -1758,5 +1761,3 @@ transform:scaleY(.9);
 }
 
 }
-}
-
