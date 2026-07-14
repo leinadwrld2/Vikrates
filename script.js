@@ -309,7 +309,87 @@ mobileMenu.classList.remove("active");
 });
 
 }
+/*==============================
+  CURRENCY CONVERTER
+==============================*/
 
+const amountInput = document.getElementById("amount");
+const fromCurrency = document.getElementById("fromCurrency");
+const toCurrency = document.getElementById("toCurrency");
+const convertBtn = document.getElementById("convertBtn");
+const swapBtn = document.getElementById("swapBtn");
+const conversionResult =
+document.getElementById("conversionResult");
+
+let converterRates = null;
+
+async function initializeConverter(){
+
+converterRates = await getOfficialRates();
+
+if(!converterRates) return;
+
+fromCurrency.innerHTML = "";
+toCurrency.innerHTML = "";
+
+Object.keys(converterRates).sort().forEach(currency=>{
+
+fromCurrency.innerHTML +=
+`<option value="${currency}">${currency}</option>`;
+
+toCurrency.innerHTML +=
+`<option value="${currency}">${currency}</option>`;
+
+});
+
+fromCurrency.value = "USD";
+toCurrency.value = "NGN";
+
+convertCurrency();
+
+}
+
+function convertCurrency(){
+
+if(!converterRates) return;
+
+const amount = parseFloat(amountInput.value) || 0;
+
+const from = fromCurrency.value;
+const to = toCurrency.value;
+
+const ngnPerFrom = 1 / converterRates[from];
+const ngnPerTo = 1 / converterRates[to];
+
+const result = amount * ngnPerFrom / ngnPerTo;
+
+conversionResult.innerHTML =
+new Intl.NumberFormat("en-NG",{
+style:"currency",
+currency:"NGN"
+}).format(result);
+
+}
+
+convertBtn.addEventListener("click",convertCurrency);
+
+amountInput.addEventListener("input",convertCurrency);
+
+fromCurrency.addEventListener("change",convertCurrency);
+
+toCurrency.addEventListener("change",convertCurrency);
+
+swapBtn.addEventListener("click",()=>{
+
+const temp = fromCurrency.value;
+
+fromCurrency.value = toCurrency.value;
+
+toCurrency.value = temp;
+
+convertCurrency();
+
+});
 /*==============================
  AUTO REFRESH
 ==============================*/
