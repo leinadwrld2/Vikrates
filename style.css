@@ -1006,62 +1006,7 @@ transform:scale(1.1);
 
 }
 
-/* ===========================
-   DARK / LIGHT MODE
-=========================== */
 
-body.light{
-
-background:#eef4fb;
-
-color:#111;
-
-}
-
-body.light .navbar{
-
-background:rgba(255,255,255,.95);
-
-}
-
-body.light .featured-card,
-body.light .card,
-body.light .converter input,
-body.light .converter select,
-body.light .search-section input,
-body.light .update{
-
-background:#ffffff;
-
-color:#111;
-
-}
-
-body.light .footer-grid p,
-body.light footer p,
-body.light .rate-title{
-
-color:#666;
-
-}
-
-body.light footer{
-
-background:#dfe9f5;
-
-}
-
-body.light .buy{
-
-color:#0f9d58;
-
-}
-
-body.light .sell{
-
-color:#d93025;
-
-}
 
 /* ===========================
    SIMPLE FADE ANIMATION
@@ -1562,28 +1507,24 @@ color:#9ca8bc;
 }
 
 .popular-card h1{
-
-margin:35px 0;
-
-font-size:48px;
-
-font-weight:700;
-
-color:#fff;
-
+    margin:20px 0 12px;
+    font-size:48px;
+    font-weight:700;
+    color:#fff;
 }
 
 .trend{
-display:inline-flex;
-align-items:center;
-gap:8px;
-margin-top:12px;
-padding:6px 12px;
-border-radius:30px;
-font-size:14px;
-font-weight:600;
-width:max-content;
-transition:.3s;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:10px 0;
+    padding:8px 12px;
+    width:fit-content;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+    position:relative;
+    z-index:5;
 }
 
 .trend.up{
@@ -1706,13 +1647,8 @@ font-size:50px;
    
 }
 .updated{
-
-margin-top:10px;
-
-font-size:13px;
-
-color:#8fa5be;
-
+    margin-top:12px;
+    display:block;
 }
 
 .sparkline{
