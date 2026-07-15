@@ -190,53 +190,33 @@ font-size:42px;
 
 .hero-right{
 
-position:absolute;
-
-right:-150px;
-
-top:70px;
-
-width:720px;
-
-height:720px;
-
 display:flex;
 
 justify-content:center;
 
 align-items:center;
 
-opacity:.55;
-
-pointer-events:none;
+flex:1;
 
 }
 
-.globe{
+#globe3d{
 
 width:100%;
 
-max-width:600px;
+max-width:650px;
 
-height:600px;
-
-border-radius:50%;
-
-overflow:hidden;
-
-position:relative;
+height:650px;
 
 }
 
 @media(max-width:900px){
 
-.globe{
+#globe3d{
+
+width:100%;
 
 height:420px;
-
-max-width:420px;
-
-margin:auto;
 
 }
 
