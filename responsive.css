@@ -25,3 +25,66 @@
     }
 
 }
+/* Desktop */
+
+@media (min-width:993px){
+
+.nav-links{
+
+display:flex;
+
+}
+
+.menu-btn{
+
+display:none !important;
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+}
+
+.logo::after{
+
+content:"VikStock";
+
+font-size:28px;
+
+font-weight:700;
+
+color:#fff;
+
+}
+
+}
+
+/* Mobile */
+
+@media (max-width:992px){
+
+.nav-links{
+
+display:none;
+
+}
+
+.logo::after{
+
+display:none;
+
+}
+
+.menu-btn{
+
+display:flex;
+
+}
+
+}
