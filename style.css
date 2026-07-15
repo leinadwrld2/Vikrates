@@ -214,89 +214,33 @@ pointer-events:none;
 
 .globe{
 
+width:100%;
+
+max-width:600px;
+
+height:600px;
+
+border-radius:50%;
+
+overflow:hidden;
+
 position:relative;
 
-width:360px;
+}
 
-height:360px;
+@media(max-width:900px){
 
-border-radius:50%;
+.globe{
 
-border:2px solid rgba(78,168,255,.25);
+height:420px;
 
-background:radial-gradient(circle,
-rgba(78,168,255,.18),
-transparent 72%);
+max-width:420px;
+
+margin:auto;
 
 }
 
-.ring{
-
-position:absolute;
-
-border-radius:50%;
-
-border:1px solid rgba(78,168,255,.15);
-
 }
-
-.ring1{
-
-width:480px;
-
-height:480px;
-
-left:-60px;
-
-top:-60px;
-
-}
-
-.ring2{
-
-width:620px;
-
-height:620px;
-
-left:-130px;
-
-top:-130px;
-
-}
-
-.ring3{
-
-width:760px;
-
-height:760px;
-
-left:-200px;
-
-top:-200px;
-
-}
-
-.dot{
-
-position:absolute;
-
-width:12px;
-
-height:12px;
-
-border-radius:50%;
-
-background:#4ea8ff;
-
-box-shadow:0 0 18px #4ea8ff;
-
-}
-
-.d1{top:20px;left:150px;}
-.d2{top:120px;right:-5px;}
-.d3{bottom:35px;left:40px;}
-.d4{bottom:90px;right:90px;}
-.d5{top:230px;left:-5px;}
 
 /* ==========================
    FEATURES
