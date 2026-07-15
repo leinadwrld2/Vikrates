@@ -1,1 +1,27 @@
+/*==========================
+ DESKTOP NAVBAR
+==========================*/
 
+@media (min-width: 993px){
+
+    /* Hide hamburger on desktop */
+    .menu-btn{
+        display: none !important;
+    }
+
+    /* Show logo text only on desktop */
+    .logo{
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo::after{
+        content: "VikStock";
+        color: #fff;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: .5px;
+    }
+
+}
