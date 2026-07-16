@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { db } from "./firebase-config.js";
 
 import {
