@@ -1,4 +1,3 @@
-import * as THREE from "https://unpkg.com/three@0.166.1/build/three.module.js";
 import { db } from "./firebase-config.js";
 
 import {
@@ -6,91 +5,260 @@ collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
-const API_KEY="873659d253950812b2f2a182";
+/*=========================================
+            API
+=========================================*/
 
-const API_URL=
+const API_KEY = "873659d253950812b2f2a182";
+
+const API_URL =
 `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/NGN`;
 
-const officialContainer=document.getElementById("officialRates");
-const blackContainer=document.getElementById("blackRates");
-const search=document.getElementById("search");
-const lastUpdated=document.getElementById("lastUpdated");
-const themeBtn=document.getElementById("theme");
+/*=========================================
+            DOM
+=========================================*/
+
+const officialContainer =
+document.getElementById("officialRates");
+
+const blackContainer =
+document.getElementById("blackRates");
+
+const search =
+document.getElementById("search");
+
+const lastUpdated =
+document.getElementById("lastUpdated");
+
+/* Popular */
+
+const popularCurrencies = [
+"USD",
+"GBP",
+"EUR",
+"PLN"
+];
+
+/* Converter */
+
+let converterRates = null;
+
+/*=========================================
+          MOBILE MENU
+=========================================*/
+
+const menuBtn =
+document.getElementById("menuBtn");
+
+const mobileMenu =
+document.getElementById("mobileMenu");
+
+const closeMenu =
+document.getElementById("closeMenu");
+
+if(menuBtn){
+
+menuBtn.onclick=()=>{
+
+mobileMenu.classList.add("active");
+
+};
+
+}
+
+if(closeMenu){
+
+closeMenu.onclick=()=>{
+
+mobileMenu.classList.remove("active");
+
+};
+
+}
+
+document.addEventListener("click",e=>{
+
+if(
+
+mobileMenu &&
+!mobileMenu.contains(e.target) &&
+!menuBtn.contains(e.target)
+
+){
+
+mobileMenu.classList.remove("active");
+
+}
+
+});
+
+/*=========================================
+            SEARCH
+=========================================*/
+
+if(search){
+
+search.addEventListener("input",()=>{
+
+const value =
+search.value.toLowerCase();
+
+document
+.querySelectorAll(".card")
+.forEach(card=>{
+
+card.style.display =
+
+card.innerText
+.toLowerCase()
+.includes(value)
+
+?
+
+"block"
+
+:
+
+"none";
+
+});
+
+});
+
+}
+
+/*=========================================
+         LAST UPDATED
+=========================================*/
+
+function updateTime(){
+
+if(lastUpdated){
+
+lastUpdated.innerHTML =
+"Last Updated • " +
+new Date().toLocaleString();
+
+}
+
+}
+
+updateTime();
+
+setInterval(updateTime,1000);
+
+/*=========================================
+        GET OFFICIAL RATES
+=========================================*/
 
 async function getOfficialRates(){
 
 try{
 
-const response=await fetch(API_URL);
-const data=await response.json();
+const response =
+await fetch(API_URL);
+
+const data =
+await response.json();
 
 return data.conversion_rates;
 
 }catch(error){
 
-console.log(error);
+console.error(error);
 
 return null;
 
 }
 
 }
+/*=========================================
+        LOAD ALL RATES
+=========================================*/
 
 async function loadRates(){
 
-officialContainer.innerHTML="<p>Loading...</p>";
-blackContainer.innerHTML="<p>Loading...</p>";
+officialContainer.innerHTML =
+"<p>Loading...</p>";
+
+blackContainer.innerHTML =
+"<p>Loading...</p>";
 
 try{
 
-const officialRates=await getOfficialRates();
+const officialRates =
+await getOfficialRates();
 
-const snapshot=
-await getDocs(collection(db,"rates"));
+converterRates = officialRates;
 
-const firestoreRates=[];
+const snapshot =
+await getDocs(
+collection(db,"rates")
+);
 
-officialContainer.innerHTML="";
-blackContainer.innerHTML="";
+officialContainer.innerHTML = "";
+blackContainer.innerHTML = "";
+
+const firestoreRates = [];
 
 snapshot.forEach(doc=>{
 
-const rate=doc.data();
+const rate = doc.data();
 
 firestoreRates.push(rate);
 
-const officialRate=
-officialRates && officialRates[rate.currency]
-? (1/officialRates[rate.currency]).toFixed(2)
-: "N/A";
+const official =
 
-officialContainer.innerHTML+=`
+officialRates &&
+officialRates[rate.currency]
+
+?
+
+(1 / officialRates[rate.currency]).toFixed(2)
+
+:
+
+"N/A";
+
+/* Official Card */
+
+officialContainer.innerHTML += `
 
 <div class="card">
 
-<div class="flag">${rate.flag}</div>
+<div class="flag">
+${rate.flag}
+</div>
 
-<div class="currency">${rate.currency}</div>
+<div class="currency">
+${rate.currency}
+</div>
 
 <div class="rate-title">
 Official Rate
 </div>
 
 <div class="buy">
-₦${officialRate}
+₦${official}
 </div>
 
 </div>
 
 `;
 
-blackContainer.innerHTML+=`
+/* Black Market */
+
+blackContainer.innerHTML += `
 
 <div class="card">
 
-<div class="flag">${rate.flag}</div>
+<div class="flag">
+${rate.flag}
+</div>
 
-<div class="currency">${rate.currency}</div>
+<div class="currency">
+${rate.currency}
+</div>
 
 <div class="rate-title">
 Black Buy
@@ -114,220 +282,321 @@ Black Sell
 
 });
 
-updatePopular(officialRates,firestoreRates);
-  converterRates = officialRates;
+/* Update Popular Cards */
+
+updatePopularCards(
+officialRates,
+firestoreRates
+);
+
+/* Update Converter */
+
+if(typeof initializeConverter==="function"){
+
 initializeConverter();
+
+}
 
 }catch(error){
 
-console.log(error);
+console.error(error);
 
-officialContainer.innerHTML=
+officialContainer.innerHTML =
+
 "<h3>Unable to load rates.</h3>";
 
-blackContainer.innerHTML="";
+blackContainer.innerHTML = "";
 
 }
 
 }
+
+/*=========================================
+        START APP
+=========================================*/
 
 loadRates();
 
-/*==============================
-  POPULAR CURRENCIES
-==============================*/
+/*=========================================
+        AUTO REFRESH
+=========================================*/
 
-function updatePopular(officialRates, firestoreRates){
+setInterval(async()=>{
 
-const currencies=["USD","GBP","EUR","PLN"];
+const refresh=document.getElementById("lastUpdated");
 
-currencies.forEach(currency=>{
+refresh.innerHTML=
+"Refreshing...";
 
-const rate=
-firestoreRates.find(r=>r.currency===currency);
+await loadRates();
+
+updateTime();
+
+},30000);
+
+/*=========================================
+      POPULAR CURRENCIES
+=========================================*/
+
+function updatePopularCards(officialRates, firestoreRates){
+
+popularCurrencies.forEach(currency=>{
+
+const rate =
+firestoreRates.find(
+r=>r.currency===currency
+);
 
 if(!rate) return;
 
-const official=
-officialRates && officialRates[currency]
-? (1/officialRates[currency]).toFixed(2)
-: "N/A";
+const official =
 
-const officialElement=
-document.getElementById(currency.toLowerCase()+"Official");
+officialRates &&
+officialRates[currency]
+
+?
+
+(1 / officialRates[currency]).toFixed(2)
+
+:
+
+"N/A";
+
+const officialElement =
+document.getElementById(
+currency.toLowerCase()+"Official"
+);
 
 const trendText =
-document.getElementById(currency.toLowerCase()+"Trend");
+document.getElementById(
+currency.toLowerCase()+"Trend"
+);
 
 const trendIcon =
-document.getElementById(currency.toLowerCase()+"TrendIcon");
+document.getElementById(
+currency.toLowerCase()+"TrendIcon"
+);
 
 const trendBox =
-document.getElementById(currency.toLowerCase()+"TrendBox");
-  if(
+document.getElementById(
+currency.toLowerCase()+"TrendBox"
+);
+
+const updated =
+document.getElementById(
+currency.toLowerCase()+"Updated"
+);
+
+if(
 !officialElement ||
 !trendText ||
 !trendIcon ||
 !trendBox
 ){
-    return;
+
+return;
+
 }
-  officialElement.innerHTML = "₦" + official;
 
-if(official==="N/A") return;
+/* Official Price */
 
-const currentRate=parseFloat(official);
+animateValue(
+officialElement,
+parseFloat(official)
+);
 
-const previousRate =
-parseFloat(localStorage.getItem(currency));
+/* Trend */
 
-if(!isNaN(previousRate)){
+const current =
+parseFloat(official);
+
+const previous =
+parseFloat(
+localStorage.getItem(currency)
+);
+
+if(!isNaN(previous)){
 
 const change =
-((currentRate - previousRate) / previousRate) * 100;
+((current-previous)/previous)*100;
 
 const percent =
 Math.abs(change).toFixed(2);
 
-if(change >= 0){
+if(change>=0){
 
-trendBox.className = "rate-change up";
-trendIcon.className = "fa-solid fa-arrow-trend-up";
-trendText.innerHTML = percent + "%";
+trendBox.className =
+"rate-change up";
+
+trendIcon.className =
+"fa-solid fa-arrow-trend-up";
+
+trendText.innerHTML =
+percent+"%";
 
 }else{
 
-trendBox.className = "rate-change down";
-trendIcon.className = "fa-solid fa-arrow-trend-down";
-trendText.innerHTML = percent + "%";
+trendBox.className =
+"rate-change down";
+
+trendIcon.className =
+"fa-solid fa-arrow-trend-down";
+
+trendText.innerHTML =
+percent+"%";
 
 }
 
 }else{
 
-trendBox.className = "rate-change up";
-trendIcon.className = "fa-solid fa-arrow-right";
-trendText.innerHTML = "0.00%";
+trendBox.className =
+"rate-change";
+
+trendIcon.className =
+"fa-solid fa-arrow-right";
+
+trendText.innerHTML =
+"0.00%";
 
 }
 
-localStorage.setItem(currency,currentRate);
+localStorage.setItem(
+currency,
+current
+);
 
-const updatedElement =
-document.getElementById(currency.toLowerCase()+"Updated");
+/* Updated Time */
 
-if(updatedElement){
+if(updated){
 
-updatedElement.innerHTML =
+updated.innerHTML =
 "Updated " +
+
 new Date().toLocaleTimeString([],{
+
 hour:"2-digit",
+
 minute:"2-digit"
-});
-
-}
-  
-}); // closes currencies.forEach()
-
-}
-/*==============================
- SEARCH
-==============================*/
-
-if(search){
-
-search.addEventListener("keyup",()=>{
-
-const value=search.value.toLowerCase();
-
-document.querySelectorAll(".card").forEach(card=>{
-
-card.style.display=
-
-card.innerText.toLowerCase().includes(value)
-
-?
-
-"block"
-
-:
-
-"none";
-
-});
 
 });
 
 }
 
-/*==============================
- LAST UPDATED
-==============================*/
-
-function updateTime(){
-
-if(lastUpdated){
-
-lastUpdated.innerHTML=
-
-"Last Updated : "+
-
-new Date().toLocaleString();
-
-}
-
-}
-
-updateTime();
-
-setInterval(updateTime,1000);
-
-
-/*==============================
- MOBILE MENU
-==============================*/
-
-const menuBtn=document.getElementById("menuBtn");
-
-const closeMenu=document.getElementById("closeMenu");
-
-const mobileMenu=document.getElementById("mobileMenu");
-
-if(menuBtn && mobileMenu){
-
-menuBtn.addEventListener("click",()=>{
-
-mobileMenu.classList.add("active");
-
 });
 
 }
 
-if(closeMenu && mobileMenu){
-
-closeMenu.addEventListener("click",()=>{
-
-mobileMenu.classList.remove("active");
-
-});
-
-}
-/*==============================
-  CURRENCY CONVERTER
-==============================*/
+/*=========================================
+        CURRENCY CONVERTER
+=========================================*/
 
 const amountInput = document.getElementById("amount");
 const fromCurrency = document.getElementById("fromCurrency");
 const toCurrency = document.getElementById("toCurrency");
 const convertBtn = document.getElementById("convertBtn");
 const swapBtn = document.getElementById("swapBtn");
+
 const conversionResult =
 document.getElementById("conversionResult");
 
-let converterRates = null;
-/*==============================
- CUSTOM DROPDOWN DATA
-==============================*/
+const converterRate =
+document.getElementById("converterRate");
+
+async function initializeConverter(){
+
+if(!converterRates) return;
+
+fromCurrency.innerHTML = "";
+toCurrency.innerHTML = "";
+
+Object.keys(converterRates)
+.sort()
+.forEach(currency=>{
+
+fromCurrency.innerHTML +=
+`<option value="${currency}">
+${currency}
+</option>`;
+
+toCurrency.innerHTML +=
+`<option value="${currency}">
+${currency}
+</option>`;
+
+});
+
+fromCurrency.value = "USD";
+toCurrency.value = "NGN";
+
+convertCurrency();
+
+}
+
+function convertCurrency(){
+
+if(!converterRates) return;
+
+const amount =
+parseFloat(amountInput.value) || 0;
+
+const from =
+fromCurrency.value;
+
+const to =
+toCurrency.value;
+
+const ngnFrom =
+1 / converterRates[from];
+
+const ngnTo =
+1 / converterRates[to];
+
+const result =
+amount * ngnFrom / ngnTo;
+
+conversionResult.innerHTML =
+new Intl.NumberFormat("en",{
+
+style:"currency",
+
+currency:to,
+
+maximumFractionDigits:2
+
+}).format(result);
+
+converterRate.innerHTML =
+`1 ${from} = ${(ngnFrom/ngnTo).toFixed(4)} ${to}`;
+
+}
+
+/* Events */
+
+convertBtn.onclick = convertCurrency;
+
+amountInput.oninput = convertCurrency;
+
+fromCurrency.onchange = convertCurrency;
+
+toCurrency.onchange = convertCurrency;
+
+swapBtn.onclick = ()=>{
+
+const temp =
+fromCurrency.value;
+
+fromCurrency.value =
+toCurrency.value;
+
+toCurrency.value =
+temp;
+
+convertCurrency();
+
+};
+/*=========================================
+      CUSTOM DROPDOWN
+=========================================*/
 
 const currencyInfo = {
 
@@ -344,47 +613,68 @@ CHF:{name:"Swiss Franc",country:"ch"}
 
 };
 
-function getCurrencyInfo(currency){
+function getCurrencyInfo(code){
 
-if(currencyInfo[currency]){
+if(currencyInfo[code]){
 
 return{
 
-name:currencyInfo[currency].name,
+name:currencyInfo[code].name,
 
-flag:`https://flagcdn.com/w40/${currencyInfo[currency].country}.png`
+flag:`https://flagcdn.com/w40/${currencyInfo[code].country}.png`
 
 };
 
 }
 
-const country = currency.substring(0,2).toLowerCase();
-
 return{
 
-name:currency,
+name:code,
 
-flag:`https://flagcdn.com/w40/${country}.png`
+flag:"https://flagcdn.com/w40/un.png"
 
 };
 
 }
 
-function createOption(currency){
+function updateSelected(type,code){
 
-const info = getCurrencyInfo(currency);
+const info=getCurrencyInfo(code);
 
-return `
+document.getElementById(type+"Code").textContent=code;
 
-<div class="option" data-currency="${currency}">
+document.getElementById(type+"Name").textContent=info.name;
 
-<img
-src="${info.flag}"
-onerror="this.src='https://flagcdn.com/w40/un.png'">
+document.getElementById(type+"Flag").src=info.flag;
+
+}
+
+function buildDropdown(){
+
+const fromOptions=document.getElementById("fromOptions");
+
+const toOptions=document.getElementById("toOptions");
+
+if(!fromOptions || !toOptions) return;
+
+fromOptions.innerHTML="";
+toOptions.innerHTML="";
+
+Object.keys(converterRates)
+.sort()
+.forEach(code=>{
+
+const info=getCurrencyInfo(code);
+
+const html=`
+
+<div class="option" data-code="${code}">
+
+<img src="${info.flag}">
 
 <div>
 
-<h4>${currency}</h4>
+<h4>${code}</h4>
 
 <p>${info.name}</p>
 
@@ -394,261 +684,231 @@ onerror="this.src='https://flagcdn.com/w40/un.png'">
 
 `;
 
-}
-
-
-
-}
-function updateSelected(type,currency){
-
-const info = getCurrencyInfo(currency);
-
-document.getElementById(type+"Code").innerHTML = currency;
-
-document.getElementById(type+"Name").innerHTML = info.name;
-
-const flag = document.getElementById(type+"Flag");
-
-flag.src = info.flag;
-
-flag.onerror = ()=>{
-
-flag.src = "https://flagcdn.com/w40/un.png";
-
-};
-
-}
-function initializeCustomDropdowns(){
-
-const fromSelect=document.getElementById("fromSelect");
-
-const toSelect=document.getElementById("toSelect");
-
-const fromOptions=document.getElementById("fromOptions");
-
-const toOptions=document.getElementById("toOptions");
-
-fromOptions.innerHTML="";
-
-toOptions.innerHTML="";
-
-Object.keys(converterRates).sort().forEach(currency=>{
-
-fromOptions.innerHTML+=createOption(currency);
-
-toOptions.innerHTML+=createOption(currency);
+fromOptions.innerHTML+=html;
+toOptions.innerHTML+=html;
 
 });
-  
-document.addEventListener("click",(e)=>{
 
-if(!fromSelect.contains(e.target)){
-
-fromSelect.classList.remove("active");
-
-}
-
-if(!toSelect.contains(e.target)){
-
-toSelect.classList.remove("active");
-
-}
-
-});
 document.querySelectorAll("#fromOptions .option")
-
 .forEach(option=>{
 
 option.onclick=()=>{
 
-const currency=
+const code=option.dataset.code;
 
-option.dataset.currency;
+fromCurrency.value=code;
 
-fromCurrency.value=currency;
-
-updateSelected("from",currency);
+updateSelected("from",code);
 
 convertCurrency();
 
-fromSelect.classList.remove("active");
+document
+.getElementById("fromSelect")
+.classList.remove("active");
 
 };
 
 });
 
 document.querySelectorAll("#toOptions .option")
-
 .forEach(option=>{
 
 option.onclick=()=>{
 
-const currency=
+const code=option.dataset.code;
 
-option.dataset.currency;
+toCurrency.value=code;
 
-toCurrency.value=currency;
-
-updateSelected("to",currency);
+updateSelected("to",code);
 
 convertCurrency();
 
-toSelect.classList.remove("active");
+document
+.getElementById("toSelect")
+.classList.remove("active");
 
 };
 
 });
 
-fromSelect.querySelector(".selected")
+}
 
+/*==============================*/
+
+window.addEventListener("load",()=>{
+
+if(converterRates){
+
+buildDropdown();
+
+}
+
+});
+
+/*==============================*/
+
+document
+.querySelector("#fromSelect .selected")
 .onclick=()=>{
 
-fromSelect.classList.toggle("active");
+document
+.getElementById("fromSelect")
+.classList.toggle("active");
 
 };
 
-toSelect.querySelector(".selected")
-
+document
+.querySelector("#toSelect .selected")
 .onclick=()=>{
 
-toSelect.classList.toggle("active");
+document
+.getElementById("toSelect")
+.classList.toggle("active");
 
 };
 
-}
+/*==============================*/
 
-async function initializeConverter(){
+swapBtn.onclick=()=>{
 
-if(!converterRates){
+const temp=fromCurrency.value;
 
-converterRates = await getOfficialRates();
+fromCurrency.value=toCurrency.value;
 
-}
+toCurrency.value=temp;
 
-if(!converterRates) return;
+updateSelected("from",fromCurrency.value);
 
-/* Hidden selects */
+updateSelected("to",toCurrency.value);
 
-fromCurrency.innerHTML="";
-toCurrency.innerHTML="";
+convertCurrency();
 
-Object.keys(converterRates)
+};
+/*=========================================
+        PREMIUM EFFECTS
+=========================================*/
 
-.sort()
+window.addEventListener("load",()=>{
 
-.forEach(currency=>{
-
-fromCurrency.innerHTML+=
-`<option value="${currency}">
-${currency}
-</option>`;
-
-toCurrency.innerHTML+=
-`<option value="${currency}">
-${currency}
-</option>`;
+document.body.classList.add("loaded");
 
 });
 
-fromCurrency.value="USD";
-toCurrency.value="NGN";
-  
+/* Cards */
 
-/* Update custom UI */
+const observer = new IntersectionObserver(entries=>{
 
-updateSelected("from","USD");
+entries.forEach(entry=>{
 
-updateSelected("to","NGN");
+if(entry.isIntersecting){
 
-/* Build dropdown */
-
-initializeCustomDropdowns();
-
-/* Convert */
-
-convertCurrency();
+entry.target.classList.add("show-card");
 
 }
 
-function convertCurrency(){
-
-if(!converterRates) return;
-
-const amount = parseFloat(amountInput.value) || 0;
-
-const from = fromCurrency.value;
-const to = toCurrency.value;
-
-const ngnFrom = 1 / converterRates[from];
-const ngnTo = 1 / converterRates[to];
-
-const result = amount * ngnFrom / ngnTo;
-
-const formatter = new Intl.NumberFormat("en",{
-style:"currency",
-currency:to,
-maximumFractionDigits:2
 });
 
-conversionResult.innerHTML = formatter.format(result);
+},{
+threshold:.2
+});
 
-document.getElementById("converterRate").innerHTML =
-`1 ${from} = ${(ngnFrom/ngnTo).toFixed(4)} ${to}`;
+document.querySelectorAll(".card,.popular-card,.converter-card")
+.forEach(card=>{
+
+observer.observe(card);
+
+});
+
+/*=========================================
+      BUTTON RIPPLE
+=========================================*/
+
+document.querySelectorAll("button,.contact-btn,.hero-contact")
+.forEach(button=>{
+
+button.addEventListener("click",function(e){
+
+const ripple=document.createElement("span");
+
+const size=Math.max(
+this.offsetWidth,
+this.offsetHeight
+);
+
+ripple.style.width=size+"px";
+ripple.style.height=size+"px";
+
+ripple.style.left=
+e.offsetX-size/2+"px";
+
+ripple.style.top=
+e.offsetY-size/2+"px";
+
+ripple.classList.add("ripple");
+
+this.appendChild(ripple);
+
+setTimeout(()=>{
+
+ripple.remove();
+
+},600);
+
+});
+
+});
+
+/*=========================================
+      HEADER SHADOW
+=========================================*/
+
+window.addEventListener("scroll",()=>{
+
+const nav=document.querySelector(".navbar");
+
+if(window.scrollY>50){
+
+nav.classList.add("sticky");
+
+}else{
+
+nav.classList.remove("sticky");
 
 }
-if(
-amountInput &&
-fromCurrency &&
-toCurrency &&
-convertBtn &&
-swapBtn &&
-conversionResult
-){
 
-convertBtn.onclick = convertCurrency;
+});
 
-amountInput.oninput = convertCurrency;
+/*=========================================
+        COUNT UP
+=========================================*/
 
-fromCurrency.onchange = ()=>{
+function animateValue(el,end){
 
-updateSelected("from", fromCurrency.value);
+let start=0;
 
-convertCurrency();
+const duration=1000;
 
-};
+const step=end/(duration/16);
 
-toCurrency.onchange = ()=>{
+function update(){
 
-updateSelected("to", toCurrency.value);
+start+=step;
 
-convertCurrency();
+if(start>=end){
 
-};
+el.innerHTML="₦"+end.toLocaleString();
 
-swapBtn.onclick = ()=>{
-
-const temp = fromCurrency.value;
-
-fromCurrency.value = toCurrency.value;
-
-toCurrency.value = temp;
-
-updateSelected("from", fromCurrency.value);
-
-updateSelected("to", toCurrency.value);
-
-convertCurrency();
-
-};
+return;
 
 }
-/*==============================
- AUTO REFRESH
-==============================*/
 
-setInterval(()=>{
+el.innerHTML=
+"₦"+Math.floor(start).toLocaleString();
 
-loadRates();
+requestAnimationFrame(update);
 
-},30000);
+}
 
+update();
+
+}
