@@ -482,3 +482,64 @@ container.clientHeight
 );
 
 });
+
+/*==========================
+PREMIUM GLOW
+==========================*/
+
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.35;
+
+const glowLight = new THREE.PointLight(
+0x7f5cff,
+8,
+10
+);
+
+glowLight.position.set(2,2,2);
+
+scene.add(glowLight);
+
+/*==========================
+GLOW PULSE
+==========================*/
+
+function glowPulse(){
+
+const pulse =
+1 + Math.sin(Date.now()*0.0015)*0.08;
+
+earth.scale.set(
+pulse,
+pulse,
+pulse
+);
+
+atmosphere.scale.set(
+pulse*1.01,
+pulse*1.01,
+pulse*1.01
+);
+
+requestAnimationFrame(glowPulse);
+
+}
+
+glowPulse();
+
+/*==========================
+EARTH TILT
+==========================*/
+
+earth.rotation.z = THREE.MathUtils.degToRad(23.5);
+
+/*==========================
+ORBIT SPEED
+==========================*/
+
+orbitGroup.children.forEach((orbit,index)=>{
+
+orbit.rotation.z =
+index * 0.6;
+
+});
