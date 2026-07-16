@@ -396,25 +396,7 @@ onerror="this.src='https://flagcdn.com/w40/un.png'">
 
 }
 
-return `
 
-<div class="option"
-
-data-currency="${currency}">
-
-<img src="${info.flag}">
-
-<div>
-
-<h4>${currency}</h4>
-
-<p>${info.name}</p>
-
-</div>
-
-</div>
-
-`;
 
 }
 function updateSelected(type,currency){
