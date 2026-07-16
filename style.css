@@ -210,6 +210,36 @@ height:650px;
 
 }
 
+.hero-globe{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.hero-globe img{
+    width:100%;
+    max-width:560px;
+    animation:floatGlobe 6s ease-in-out infinite;
+    user-select:none;
+    pointer-events:none;
+}
+
+@keyframes floatGlobe{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-12px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
 @media(max-width:900px){
 
 #globe3d{
