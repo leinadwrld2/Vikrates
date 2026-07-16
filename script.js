@@ -669,38 +669,152 @@ setInterval(()=>{
 loadRates();
 
 },30000);
-/*=========================
+/*==============================
   3D GLOBE
-=========================*/
+==============================*/
 
-window.addEventListener("load",()=>{
+const globeContainer = document.getElementById("globe3d");
 
-VANTA.GLOBE({
+if(globeContainer){
 
-el:"#globe3d",
+const scene = new THREE.Scene();
 
-mouseControls:true,
+const camera = new THREE.PerspectiveCamera(
 
-touchControls:true,
+45,
 
-gyroControls:false,
+globeContainer.clientWidth /
 
-minHeight:400,
+globeContainer.clientHeight,
 
-minWidth:400,
+0.1,
 
-scale:1,
+1000
 
-scaleMobile:1,
+);
 
-color:0x3b82f6,
+camera.position.z = 3;
 
-color2:0x2563eb,
+const renderer = new THREE.WebGLRenderer({
 
-backgroundColor:0x08111f,
+antialias:true,
 
-size:1.3
+alpha:true
+
+});
+
+renderer.setPixelRatio(window.devicePixelRatio);
+
+renderer.setSize(
+
+globeContainer.clientWidth,
+
+globeContainer.clientHeight
+
+);
+
+globeContainer.appendChild(renderer.domElement);
+
+/* Earth */
+
+const geometry = new THREE.SphereGeometry(
+
+1,
+
+64,
+
+64
+
+);
+
+const material = new THREE.MeshStandardMaterial({
+
+color:0x2f80ff,
+
+metalness:0.2,
+
+roughness:0.7
 
 });
 
+const earth = new THREE.Mesh(
+
+geometry,
+
+material
+
+);
+
+scene.add(earth);
+
+/* Lights */
+
+const light = new THREE.DirectionalLight(
+
+0xffffff,
+
+2
+
+);
+
+light.position.set(
+
+5,
+
+3,
+
+5
+
+);
+
+scene.add(light);
+
+scene.add(
+
+new THREE.AmbientLight(
+
+0x6fa8ff,
+
+1.5
+
+)
+
+);
+
+/* Animation */
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+earth.rotation.y += 0.003;
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+/* Resize */
+
+window.addEventListener("resize",()=>{
+
+camera.aspect =
+
+globeContainer.clientWidth/
+
+globeContainer.clientHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(
+
+globeContainer.clientWidth,
+
+globeContainer.clientHeight
+
+);
+
 });
+
+}
