@@ -211,43 +211,52 @@ height:650px;
 }
 
 .hero-globe{
-    width:100%;
     display:flex;
     justify-content:center;
     align-items:center;
+    width:100%;
 }
 
 .hero-globe img{
-    width:100%;
-    max-width:560px;
-    animation:floatGlobe 6s ease-in-out infinite;
-    user-select:none;
-    pointer-events:none;
+    width:160%;
+    max-width:900px;
+    min-width:500px;
+    height:auto;
+    display:block;
+    margin-left:-80px;
 }
 
-@keyframes floatGlobe{
+/* Tablets */
+@media (max-width:1024px){
 
-0%{
-transform:translateY(0px);
-}
-
-50%{
-transform:translateY(-12px);
-}
-
-100%{
-transform:translateY(0px);
+.hero-globe img{
+    width:170%;
+    max-width:760px;
+    margin-left:-40px;
 }
 
 }
-@media(max-width:900px){
 
-#globe3d{
+/* Phones */
+@media (max-width:768px){
 
-width:100%;
+.hero-globe img{
+    width:190%;
+    max-width:650px;
+    min-width:420px;
+    margin-left:-60px;
+}
 
-height:420px;
+}
 
+/* Small phones */
+@media (max-width:480px){
+
+.hero-globe img{
+    width:220%;
+    max-width:580px;
+    min-width:360px;
+    margin-left:-80px;
 }
 
 }
