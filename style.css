@@ -215,15 +215,20 @@ height:650px;
     justify-content:center;
     align-items:center;
     width:100%;
+    overflow:hidden;
 }
 
 .hero-globe img{
-    width:160%;
-    max-width:900px;
-    min-width:500px;
+    width:100%;
+    max-width:560px;
     height:auto;
     display:block;
-    margin-left:-80px;
+
+    transform:scale(1.35);
+    transform-origin:center center;
+
+    user-select:none;
+    pointer-events:none;
 }
 
 /* Tablets */
